@@ -1,0 +1,26 @@
+[
+    {
+        "id": "Fabian",
+        "name": "파비안 크리스차넨",
+        "href": "/21",
+        "thumb": "https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/character/Fabian.jpg",
+        "work": "아룬드 연대기",
+        "race": "엘라비다",
+        "age": "18세",
+        "birthday": "481년 파비안느 아룬드",
+        "gender": "남성",
+        "family": "부 아르킨 나르시냐크<br>모 이진즈 크리스차넨<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>이복동생 하르얀 나르시냐크</span></details>"
+    },
+    {
+        "id": "Yurika",
+        "name": "유리카 오베르뉴",
+        "href": "/103",
+        "thumb": "https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/character/Yurika.jpg",
+        "work": "아룬드 연대기",
+        "race": "엘라비다<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>마브릴</span></details>",
+        "age": "18세",
+        "birthday": "481년 파비안느 아룬드<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>281년 암흑 아룬드</span></details>",
+        "gender": "여성",
+        "family": "부 ???<br>모 ???"
+    }
+]
