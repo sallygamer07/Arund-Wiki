@@ -510,13 +510,6 @@
             }
         ]
     },
-    "characters": [
-        {
-            "name": "파비안 크리스차넨",
-            "href": "/21",
-            "thumb": "이미지_URL"
-        }
-    ],
     "relations": {
         "nodes": [
             {
