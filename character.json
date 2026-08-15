@@ -22,5 +22,65 @@
         "birthday": "481년 파비안느 아룬드<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>281년 암흑 아룬드</span></details>",
         "gender": "여성",
         "family": "부 ???<br>모 ???"
+    },
+    {
+        "id": "Juani",
+        "name": "주아니",
+        "href": "/99",
+        "thumb": "https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/character/Juani.jpg",
+        "work": "세월의 돌",
+        "race": "로아에",
+        "age": "65세[footnote]만 나이로 세기에 작중 66세를 맞이했다.[/footnote]",
+        "birthday": "434년 약초 아룬드 2일",
+        "gender": "여성",
+        "family": "불명"
+    },
+    {
+        "id": "Eldaren",
+        "name": "엘다렌 히페르 카즈야 그리반센",
+        "href": "/105",
+        "thumb": "https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/character/Eldaren.jpg",
+        "work": "세월의 돌",
+        "race": "드워프",
+        "age": "300살 이상",
+        "birthday": "???년 타로핀 아룬드",
+        "gender": "남성",
+        "family": "불명"
+    },
+    {
+        "id": "Mikalis",
+        "name": "미칼리스 마르나치야",
+        "href": "/104",
+        "thumb": "https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/character/Yurika.jpg",
+        "work": "세월의 돌",
+        "race": "엘라비다<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>마브릴</span></details>",
+        "age": "709세",
+        "birthday": "8290년 ??? 아룬드",
+        "gender": "남성",
+        "family": "불명"
+    },
+    {
+        "id": "Ezekiel",
+        "name": "에제키엘<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>에제키엘 나르시냐크</span></details>",
+        "href": "/106",
+        "thumb": "",
+        "work": "세월의 돌",
+        "race": "엘라비다",
+        "age": "35세",
+        "birthday": "불명",
+        "gender": "남성",
+        "family": "아내 조피스티네 위텔스바른<br><details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>후손 아르킨 나르시냐크</span><span>후손 파비안 크리스차넨</span></details>"
+    },
+    {
+        "id": "Kirillocha",
+        "name": "키릴로차 르 반",
+        "href": "/19",
+        "thumb": "",
+        "work": "태양의 탑",
+        "race": "마브릴<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>네냐</span></details>",
+        "age": "26세",
+        "birthday": "244년 황금 아룬드 1일",
+        "gender": "남성",
+        "family": "조부 조프뢰 르 반"
     }
 ]
