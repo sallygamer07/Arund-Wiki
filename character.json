@@ -94,5 +94,29 @@
         "birthday": "244년 황금 아룬드 1일",
         "gender": "남성",
         "family": "조부 조프뢰 르 반"
+    },
+    {
+        "id": "Fabiane",
+        "name": "파비안느",
+        "href": "/86",
+        "thumb": "",
+        "work": "기타",
+        "race": "고대 이스나미르인",
+        "age": "불명",
+        "birthday": "불명",
+        "gender": "여성",
+        "family": "불명"
+    },
+    {
+        "id": "Yenichaetree",
+        "name": "예니체트리",
+        "href": "/87",
+        "thumb": "",
+        "work": "기타",
+        "race": "고대 이스나미르인",
+        "age": "불명",
+        "birthday": "불명",
+        "gender": "여성",
+        "family": "불명"
     }
 ]
