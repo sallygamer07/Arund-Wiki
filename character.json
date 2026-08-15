@@ -36,6 +36,18 @@
         "family": "불명"
     },
     {
+        "id": "Nardi",
+        "name": "나르디<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>나르디엔 루아 듀플리시아드</span></details>",
+        "href": "/127",
+        "thumb": "https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/character/Nardi.jpg",
+        "work": "세월의 돌",
+        "race": "엘라비다",
+        "age": "18세",
+        "birthday": "481년",
+        "gender": "남성",
+        "family": "<details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>부 이그논 루아 듀플리시아드<br>친모 ???<br>양모 아마리에<br>이복여동생 란즈미 루아 듀플리시아드<br>아내 잔-이슬로즈 아미유 드 네르쥬>br>자녀 유리카 루아 듀플리시아드</span></details>"
+    },
+    {
         "id": "Eldaren",
         "name": "엘다렌 히페르 카즈야 그리반센",
         "href": "/105",
@@ -69,7 +81,7 @@
         "age": "35세",
         "birthday": "불명",
         "gender": "남성",
-        "family": "아내 조피스티네 위텔스바른<br><details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>후손 아르킨 나르시냐크</span><span>후손 파비안 크리스차넨</span></details>"
+        "family": "아내 조피스티네 위텔스바른<br><details class=\"nw-spoiler-field\"><summary>스포일러</summary><span>후손 아르킨 나르시냐크<br>후손 파비안 크리스차넨</span></details>"
     },
     {
         "id": "Kirillocha",
