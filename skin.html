@@ -1,0 +1,3495 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="FqMMSLz7Fi3C_THqL7ubyXhJsd3rW2CvQF4kHaewhk0" />
+  <title>[##_title_##]</title>
+  <meta name="Keywords" content="아룬드 위키" />
+  <meta name="description" content="[##_description_##]" />
+  <link rel="stylesheet" type="text/css" href="./style.css" />
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;family=Nanum+Gothic:wght@400;700;800&amp;family=Noto+Serif+KR:wght@300;400;600;700;900&amp;display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-kopubworld@1.0/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="qna-styles.css">
+  <script>
+    /* 테마 최우선 적용 (FOUC 방지를 위해 head에서 즉시 실행) */
+    (function () {
+      try {
+        var saved = localStorage.getItem('nw-theme');
+        if (saved) {
+          document.documentElement.setAttribute('data-theme', saved);
+        } else {
+          var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+          document.documentElement.setAttribute('data-theme', prefersLight ? 'light' : 'dark');
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+
+    /* data.json */
+    window.NW_DATA_URL = 'https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/data.json?v=' + Date.now();
+    window.nwDataPromise = fetch(window.NW_DATA_URL)
+      .then(function (res) { return res.json(); })
+      .catch(function () {
+        return { quotes: [], wikiDict: {}, playlist: [] };
+      });
+    
+    /* character.json */
+    window.NW_CHARACTER_URL = 'https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/character.json?v=' + Date.now();
+    window.nwCharacterPromise = fetch(window.NW_CHARACTER_URL)
+      .then(function (res) { return res.json(); })
+      .catch(function () {
+        return [];
+      });
+  </script>
+</head>
+
+<body>
+  <!-- ============ 로딩 화면 ============ -->
+  <div id="nw-loader" class="nw-loader">
+    <div class="nw-loader-inner">
+      <div class="nw-loader-spinner"></div>
+      <div class="nw-loader-text">Arund Chronicle<br />아룬드 연대기</div>
+    </div>
+  </div>
+
+  <!-- ============ 상단 헤더 ============ -->
+  <header class="nw-header">
+    <div class="nw-header-inner">
+      <a href="[##_blog_link_##]" class="nw-logo">아룬드 위키</a>
+
+      <nav class="nw-navicons">
+        <a href="[##_blog_link_##]notice">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" fill="none" stroke="currentColor"
+              stroke-width="1.6" />
+          </svg>
+          <span>공지사항</span>
+        </a>
+        <a href="[##_guestbook_link_##]">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 9v4M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+          <span>오류 제보</span>
+        </a>
+      </nav>
+
+      <form class="nw-search" id="nw-search-form">
+        <select class="nw-search-scope-select" id="nw-search-scope" aria-label="검색 범위">
+          <option value="title">제목</option>
+          <option value="all">제목+내용</option>
+        </select>
+        <input type="text" name="q" placeholder="여기에서 검색" />
+        <button type="submit" aria-label="검색">
+          <svg viewBox="0 0 20 20" width="15" height="15">
+            <path
+              d="M13.6 12.2h-.8l-.3-.3a6.6 6.6 0 1 0-.7.7l.3.3v.8l5 5 1.5-1.5-5-5zm-6.1 0a4.6 4.6 0 1 1 0-9.2 4.6 4.6 0 0 1 0 9.2z"
+              fill="currentColor" />
+          </svg>
+        </button>
+      </form>
+
+      <button type="button" id="nw-mobile-menu-btn" class="nw-mobile-menu-btn" aria-label="메뉴 열기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+      </button>
+
+      <button type="button" id="nw-theme-toggle" class="nw-theme-toggle" aria-label="다크 모드 전환" title="다크 모드 전환">
+        <span class="icon-sun">☀</span><span class="icon-moon">☾</span>
+      </button>
+
+      <a href="#" id="nw-random-btn" class="nw-icon-btn" title="무작위 문서">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="m18 14 4 4-4 4" />
+          <path d="m18 2 4 4-4 4" />
+          <path d="M2 18h1.97a4 4 0 0 0 3.3-1.7l5.46-8.6a4 4 0 0 1 3.3-1.7H22" />
+          <path d="M2 6h1.97a4 4 0 0 1 3.6 2.2" />
+          <path d="M22 18h-6.04a4 4 0 0 1-3.3-1.8l-.36-.45" />
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <div class="nw-wrap">
+
+    <!-- ============ 본문 영역 ============ -->
+    <main class="nw-main">
+      <nav class="nw-floating-toc" id="nw-floating-toc"></nav>
+
+      <section class="nw-hero" id="nw-home-hero">
+        <p class="nw-hero-eyebrow">아룬드 광인이 시작한 백업 위키</p>
+        <h1 class="nw-hero-title">아룬드 위키에 오신 것을 환영합니다!</h1>
+        <p class="nw-hero-note">개인이 작성한 기록용 위키입니다. 틀린 정보가 있을 수 있습니다.</p>
+        <p class="nw-hero-desc">[##_blog_description_##]</p>
+
+        <nav class="nw-hero-links">
+          <a href="[##_blog_link_##]notice" class="nw-hero-link">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" fill="none" stroke="currentColor"
+                stroke-width="1.6" />
+            </svg>
+            <span>공지사항</span>
+          </a>
+          <a href="[##_guestbook_link_##]" class="nw-hero-link">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 9v4M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+            </svg>
+            <span>오류 제보</span>
+          </a>
+          <form class="nw-hero-link nw-hero-link-search" id="nw-hero-search-form">
+            <svg viewBox="0 0 20 20">
+              <path
+                d="M13.6 12.2h-.8l-.3-.3a6.6 6.6 0 1 0-.7.7l.3.3v.8l5 5 1.5-1.5-5-5zm-6.1 0a4.6 4.6 0 1 1 0-9.2 4.6 4.6 0 0 1 0 9.2z"
+                fill="currentColor" />
+            </svg>
+            <input type="text" name="q" placeholder="문서 검색" />
+            <select class="nw-search-scope-select" id="nw-hero-search-scope" aria-label="검색 범위">
+              <option value="title">제목</option>
+              <option value="all">제목+내용</option>
+            </select>
+          </form>
+        </nav>
+        <p class="nw-hero-visitors">
+          오늘 <b>[##_count_today_##]</b>명의 에프랑지아가 이곳을 방문했습니다.<br>
+          지금까지 <b>[##_count_total_##]</b>명의 에프랑지아가 이곳을 방문했습니다.
+        </p>
+        <div class="nw-hero-stats" id="nw-hero-stats"></div>
+      </section>
+
+      <s_guest>
+        <section class="nw-guestbook">
+          <h2 class="nw-guestbook-title">오류 제보</h2>
+          <p class="nw-guestbook-desc">위키에서 발견한 오류, 오탈자, 깨진 링크 등을 남겨주세요.</p>
+          [##_guestbook_group_##]
+        </section>
+      </s_guest>
+
+      <s_article_rep>
+        <article class="nw-article">
+
+          <div class="nw-title-row">
+            <h1 class="nw-title">[##_article_rep_title_##]</h1>
+            <span class="nw-cat-badge">[##_article_rep_category_##]</span>
+            <div class="nw-title-side">
+              <button type="button" class="nw-bookmark-btn" id="nw-bookmark-btn" aria-label="즐겨찾기">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z" />
+                </svg>
+              </button>
+              <button type="button" class="nw-dots" aria-label="더보기">⋮</button>
+            </div>
+          </div>
+
+          <div class="nw-meta">게시글 등록 시각: [##_article_rep_date_##]</div>
+
+          <div class="nw-classify-box">
+            <span class="label">분류:</span>
+            [##_article_rep_category_##]
+          </div>
+
+          <div class="nw-content" id="article-body">
+            [##_article_rep_desc_##]
+          </div>
+
+          <nav class="nw-prevnext">
+            <s_article_prev>
+              <a href="[##_article_prev_link_##]" class="nw-prev">
+                <span class="label">◀ 이전 문서</span>
+                <span class="ttl">[##_article_prev_title_##]</span>
+              </a>
+            </s_article_prev>
+            <s_article_next>
+              <a href="[##_article_next_link_##]" class="nw-next">
+                <span class="label">다음 문서 ▶</span>
+                <span class="ttl">[##_article_next_title_##]</span>
+              </a>
+            </s_article_next>
+          </nav>
+
+        </article>
+      </s_article_rep>
+
+      <!-- 공지사항 페이지 전용 목록 -->
+      <s_notice_rep>
+        <article class="nw-list-item">
+          <a href="[##_blog_link_##]notice" class="nw-list-title">[##_notice_rep_title_##]</a>
+          <div class="nw-list-meta">
+            <span>[##_notice_rep_date_##]</span>
+          </div>
+          <p class="nw-list-summary">[##_notice_rep_desc_##]</p>
+        </article>
+      </s_notice_rep>
+
+      <!-- 글 목록(메인/카테고리) 보기 -->
+      <s_list>
+        <s_list_rep>
+          <article class="nw-list-item">
+            <s_list_rep_thumbnail><img class="nw-list-thumb" src="[##_list_rep_thumbnail_url_##]" alt=""></s_list_rep_thumbnail>
+            <a href="[##_list_rep_link_##]" class="nw-list-title">[##_list_rep_title_##]</a>
+            <div class="nw-list-meta">
+              <span class="nw-list-cat">[##_list_rep_category_##]</span>
+              <span>[##_list_rep_regdate_##]</span>
+            </div>
+          </article>
+        </s_list_rep>
+      </s_list>
+
+      <nav class="nw-paging">
+        <s_paging>
+          <a [##_prev_page_##] class="nw-page-nav [##_no_more_prev_##]">이전</a>
+          <span class="nw-page-nums">
+            <s_paging_rep>
+              <a [##_paging_rep_link_##] class="nw-page-num">[##_paging_rep_link_num_##]</a>
+            </s_paging_rep>
+          </span>
+          <a [##_next_page_##] class="nw-page-nav [##_no_more_next_##]">다음</a>
+        </s_paging>
+      </nav>
+
+    </main>
+
+    <!-- ============ 사이드바 ============ -->
+    <aside class="nw-sidebar">
+      <div class="nw-sidebar-sticky">
+        <section class="nw-box nw-box-category" id="nw-sidebar-category">
+          <h3>
+            <svg viewBox="0 0 24 24" class="folder-icon">
+              <path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6z" fill="none"
+                stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            카테고리
+          </h3>
+          <div class="nw-category-tree">
+            [##_category_list_##]
+          </div>
+        </section>
+        <section class="nw-box nw-box-recent" id="nw-recent-box" style="display:none;">
+          <h3>
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+              <path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+            최근 본 문서
+          </h3>
+          <div class="nw-recent-list" id="nw-recent-list"></div>
+        </section>
+        <section class="nw-box nw-box-bookmark" id="nw-bookmark-box" style="display:none;">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z" />
+            </svg>
+            즐겨찾기
+          </h3>
+          <div class="nw-recent-list" id="nw-bookmark-list"></div>
+        </section>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- ============ 모바일 사이드 드로어 ============ -->
+  <div id="nw-mobile-drawer" class="nw-mobile-drawer">
+    <div class="nw-mobile-drawer-overlay"></div>
+    <div class="nw-mobile-drawer-panel">
+      <div class="nw-mobile-drawer-head">
+        <span>메뉴</span>
+        <button type="button" class="nw-mobile-drawer-close" aria-label="닫기">×</button>
+      </div>
+
+      <div class="nw-mobile-drawer-actions">
+        <a href="[##_blog_link_##]notice">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" fill="none" stroke="currentColor"
+              stroke-width="1.6" />
+          </svg>
+          공지사항
+        </a>
+        <a href="[##_guestbook_link_##]">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 9v4M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+          오류 제보
+        </a>
+        <button type="button" id="nw-mobile-theme-toggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4.5" />
+            <path
+              d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6" />
+          </svg>
+          다크모드
+        </button>
+        <a href="#" id="nw-mobile-random-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="m18 14 4 4-4 4" />
+            <path d="m18 2 4 4-4 4" />
+            <path d="M2 18h1.97a4 4 0 0 0 3.3-1.7l5.46-8.6a4 4 0 0 1 3.3-1.7H22" />
+            <path d="M2 6h1.97a4 4 0 0 1 3.6 2.2" />
+            <path d="M22 18h-6.04a4 4 0 0 1-3.3-1.8l-.36-.45" />
+          </svg>
+          무작위 문서
+        </a>
+      </div>
+
+      <div class="nw-mobile-drawer-section">
+        <h4>카테고리</h4>
+        <div class="nw-category-tree">
+          [##_category_list_##]
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 푸터 ============ -->
+  <footer class="nw-footer">
+    <p>[##_blog_title_##] · Original Design Inspired by <a href="https://namu.wiki/" target="_blank"
+        rel="noopener">namu.wiki</a></p>
+    <p class="nw-footer-sub">이 위키는 전민희 작가의 아룬드 연대기 시리즈에 관한 정보를 정리한 사이트입니다.</p>
+  </footer>
+
+  [##_html_source_##]
+
+  <div class="nw-bgm-player collapsed" id="nw-bgm-player">
+    <div class="nw-bgm-head">
+      <button type="button" class="nw-bgm-toggle" id="nw-bgm-toggle" aria-label="플레이어 열기/닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+      </button>
+      <span class="nw-bgm-title" id="nw-bgm-title">재생목록</span>
+    </div>
+    <div class="nw-bgm-body">
+      <div class="nw-bgm-controls">
+        <button type="button" id="nw-bgm-prev" aria-label="이전 곡">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 6h2v12H6zM20 6v12l-8.5-6z" />
+          </svg>
+        </button>
+        <button type="button" class="nw-bgm-play" id="nw-bgm-play" aria-label="재생/일시정지">
+          <svg viewBox="0 0 24 24" fill="currentColor" id="nw-bgm-play-icon">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+        <button type="button" id="nw-bgm-next" aria-label="다음 곡">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 6h2v12h-2zM4 6v12l8.5-6z" />
+          </svg>
+        </button>
+      </div>
+      <div class="nw-bgm-progress" id="nw-bgm-progress">
+        <div class="nw-bgm-progress-fill" id="nw-bgm-progress-fill"></div>
+      </div>
+      <div class="nw-bgm-volume-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M11 5 6 9H2v6h4l5 4z" />
+          <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+        </svg>
+        <input type="range" id="nw-bgm-volume" min="0" max="100" value="60" />
+      </div>
+    </div>
+    <div id="nw-bgm-yt" style="position:absolute;width:1px;height:1px;overflow:hidden;"></div>
+  </div>
+
+  <div class="nw-scroll-btns">
+    <button type="button" id="nw-scroll-top-btn" class="nw-scroll-btn" aria-label="맨 위로">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M18 15l-6-6-6 6" />
+      </svg>
+    </button>
+    <button type="button" id="nw-scroll-bottom-btn" class="nw-scroll-btn" aria-label="맨 아래로">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- 단어사전 위젯 -->
+  <button type="button" id="nw-dict-launcher" class="nw-dict-launcher" aria-label="단어사전 열기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    </svg>
+  </button>
+
+  <div id="nw-dict-root" role="complementary" aria-label="단어사전 위젯">
+    <div id="nw-dict-header">
+      <svg class="nw-dict-book-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true">
+        <rect x="2" y="1.5" width="10" height="14" rx="2" fill="rgba(255,255,255,0.22)" />
+        <rect x="4" y="4" width="6" height="1.1" rx="0.55" fill="white" />
+        <rect x="4" y="6.5" width="6" height="1.1" rx="0.55" fill="white" />
+        <rect x="4" y="9" width="4.5" height="1.1" rx="0.55" fill="white" />
+        <rect x="13" y="3.5" width="3" height="12" rx="1.2" fill="rgba(255,255,255,0.38)" />
+      </svg>
+      <span id="nw-dict-portal-name"></span>
+      <span id="nw-dict-label"></span>
+      <button id="nw-dict-toggle-btn" title="접기/펼치기" aria-label="위젯 접기">−</button>
+    </div>
+
+    <div id="nw-dict-body">
+      <div id="nw-dict-search-area">
+        <div id="nw-dict-search-box">
+          <input type="text" id="nw-dict-search-input" autocomplete="off" spellcheck="false">
+          <div id="nw-dict-search-icon" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div id="nw-dict-content">
+        <div id="nw-dict-img-wrap"><img id="nw-dict-word-img" src="" alt=""></div>
+        <div id="nw-dict-word-row">
+          <span id="nw-dict-word"></span>
+          <span id="nw-dict-pron"></span>
+        </div>
+        <div id="nw-dict-meta-row"><span id="nw-dict-pos-badge"></span></div>
+        <ul id="nw-dict-defs" aria-label="뜻 풀이"></ul>
+        <div id="nw-dict-example-wrap">
+          <div id="nw-dict-example-label"></div>
+          <div id="nw-dict-example-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      /* ============================================================
+         공통 유틸 & 자주 쓰는 요소 캐싱
+         ============================================================ */
+      var articleBody = document.getElementById('article-body');
+      var titleEl = document.querySelector('.nw-title');
+      var currentTitle = titleEl ? titleEl.textContent.trim() : '';
+      var currentHref = location.pathname;
+
+      function escapeRegExp(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+      function isHangul(ch) {
+        if (!ch) return false;
+        var code = ch.charCodeAt(0);
+        return code >= 0xac00 && code <= 0xd7a3;
+      }
+
+      /* 제목 텍스트에서 화살표 아이콘, 사람이 직접 입력한 번호를 제거하고
+         순수한 제목만 뽑아내는 함수 (자동 목차 번호와 중복 방지) */
+      function cleanHeadingText(h) {
+        var clone = h.cloneNode(true);
+        clone.querySelectorAll('.nw-toggle-arrow').forEach(function (el) { el.remove(); });
+        var text = clone.textContent.trim();
+        return text.replace(/^\d+(\.\d+)*\.\s*/, '');
+      }
+
+      var EXCLUDED_HEADING_PATTERN = /카테고리의\s*다른|관련\s*글|다른\s*글\s*$/;
+
+      /* ============================================================
+         다크모드 토글
+         ============================================================ */
+      var root = document.documentElement;
+      function toggleTheme() {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('nw-theme', next); } catch (e) { }
+      }
+      var themeBtn = document.getElementById('nw-theme-toggle');
+      if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+      var mobileThemeBtn = document.getElementById('nw-mobile-theme-toggle');
+      if (mobileThemeBtn) mobileThemeBtn.addEventListener('click', toggleTheme);
+
+      /* ============================================================
+         히어로(대문)는 블로그 루트 경로일 때만 표시
+         ============================================================ */
+      var homeHero = document.getElementById('nw-home-hero');
+      if (homeHero) {
+        var isHome = /^\/(page\/\d+)?\/?$/.test(location.pathname);
+        if (!isHome) homeHero.style.display = 'none';
+      }
+
+      /* ============================================================
+         미분류("Another category") 카테고리 항목 숨기기
+         (사이드바 + 모바일 드로어 모두 적용)
+         ============================================================ */
+      document.querySelectorAll('.nw-category-tree').forEach(function (tree) {
+        tree.querySelectorAll('a').forEach(function (a) {
+          var label = a.textContent.trim().toLowerCase();
+          if (label.indexOf('another category') !== -1 || label.indexOf('미분류') !== -1) {
+            var li = a.closest('li');
+            (li || a).style.display = 'none';
+          }
+        });
+      });
+
+      /* ============================================================
+         페이지네이션: 현재 페이지 강조
+         ============================================================ */
+      document.querySelectorAll('.nw-page-num').forEach(function (a) {
+        try {
+          var linkUrl = new URL(a.href, location.href);
+          if (linkUrl.pathname === location.pathname && linkUrl.search === location.search) {
+            a.classList.add('current');
+          }
+        } catch (e) { }
+      });
+
+      /* ============================================================
+         무작위 문서 이동
+         ============================================================ */
+      function goToRandomDoc() {
+        fetch('/sitemap.xml')
+          .then(function (res) { return res.text(); })
+          .then(function (str) {
+            var xml = new DOMParser().parseFromString(str, 'text/xml');
+            var locs = Array.from(xml.querySelectorAll('url > loc')).map(function (el) { return el.textContent.trim(); });
+            var postLinks = locs.filter(function (url) { return /\/\d+\/?$/.test(url); });
+            if (postLinks.length) {
+              window.location.href = postLinks[Math.floor(Math.random() * postLinks.length)];
+            } else {
+              alert('무작위 문서를 찾을 수 없습니다.');
+            }
+          })
+          .catch(function () {
+            alert('무작위 문서를 불러오지 못했습니다.');
+          });
+      }
+      var randomBtn = document.getElementById('nw-random-btn');
+      if (randomBtn) randomBtn.addEventListener('click', function (e) { e.preventDefault(); goToRandomDoc(); });
+      var mobileRandomBtn = document.getElementById('nw-mobile-random-btn');
+      if (mobileRandomBtn) mobileRandomBtn.addEventListener('click', function (e) { e.preventDefault(); goToRandomDoc(); });
+
+      /* ============================================================
+         모바일 사이드 드로어
+         ============================================================ */
+      var mobileMenuBtn = document.getElementById('nw-mobile-menu-btn');
+      var drawer = document.getElementById('nw-mobile-drawer');
+      var drawerClose = drawer ? drawer.querySelector('.nw-mobile-drawer-close') : null;
+      var drawerOverlay = drawer ? drawer.querySelector('.nw-mobile-drawer-overlay') : null;
+
+      function openDrawer() {
+        if (!drawer) return;
+        drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeDrawer() {
+        if (!drawer) return;
+        drawer.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+      if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+      if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+
+      /* ============================================================
+         nw-charinfo-color 칸: 배경 밝기에 따라 글자색(흰/검) 자동 결정
+         ============================================================ */
+      function pickContrastTextColor(bgColorStr) {
+        var nums = bgColorStr.match(/[\d.]+/g);
+        if (!nums || nums.length < 3) return '#ffffff';
+        var r = parseFloat(nums[0]), g = parseFloat(nums[1]), b = parseFloat(nums[2]);
+        function channel(c) {
+          c = c / 255;
+          return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        }
+        var luminance = 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+        return luminance > 0.55 ? '#1a1b1d' : '#ffffff';
+      }
+      document.querySelectorAll('.nw-charinfo-color').forEach(function (el) {
+        el.style.color = pickContrastTextColor(getComputedStyle(el).backgroundColor);
+      });
+
+      /* ============================================================
+         책장 넘기기(nw-book) 위젯
+         ============================================================ */
+      if (articleBody) {
+        articleBody.querySelectorAll('.nw-book').forEach(function (bookEl) {
+          var pages = Array.prototype.slice.call(bookEl.querySelectorAll('.nw-book-page'));
+          if (!pages.length) return;
+
+          var total = pages.length;
+          var current = 0;
+          var indicator = bookEl.querySelector('.nw-book-indicator');
+          var jumpInput = bookEl.querySelector('.nw-book-jump-input');
+          var prevBtn = bookEl.querySelector('.nw-book-prev');
+          var nextBtn = bookEl.querySelector('.nw-book-next');
+          var pagesWrap = bookEl.querySelector('.nw-book-pages');
+          var slider = bookEl.querySelector('.nw-book-slider');
+          var sliderTooltip = bookEl.querySelector('.nw-book-slider-tooltip');
+          var sliderTrack = bookEl.querySelector('.nw-book-progress');
+
+          function render(direction) {
+            pages.forEach(function (p, i) { p.classList.toggle('is-active', i === current); });
+            if (indicator) indicator.textContent = (current + 1) + ' / ' + total;
+            if (jumpInput) jumpInput.value = current + 1;
+            if (prevBtn) prevBtn.disabled = current === 0;
+            if (nextBtn) nextBtn.disabled = current === total - 1;
+            if (pagesWrap) pagesWrap.scrollTop = 0;
+            if (slider) {
+              var percent = total > 1 ? current / (total - 1) : 1;
+              slider.value = Math.round(percent * 1000);
+              if (sliderTooltip) sliderTooltip.textContent = Math.round(percent * 100) + '%';  // 추가
+            }
+            if (pagesWrap && direction) {
+              pagesWrap.classList.remove('nw-anim-left', 'nw-anim-right');
+              void pagesWrap.offsetWidth;
+              pagesWrap.classList.add(direction === 'next' ? 'nw-anim-right' : 'nw-anim-left');
+            }
+          }
+
+          function goTo(idx, direction) {
+            idx = Math.max(0, Math.min(total - 1, idx));
+            if (idx === current) return;
+            direction = direction || (idx > current ? 'next' : 'prev');
+            current = idx;
+            render(direction);
+            bookEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+
+          if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1, 'prev'); });
+          if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1, 'next'); });
+          if (jumpInput) {
+            jumpInput.addEventListener('change', function () {
+              var v = parseInt(jumpInput.value, 10);
+              if (!isNaN(v)) goTo(v - 1);
+            });
+          }
+
+          bookEl.setAttribute('tabindex', '0');
+          bookEl.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') goTo(current + 1, 'next');
+            if (e.key === 'ArrowLeft') goTo(current - 1, 'prev');
+          });
+
+          var touchStartX = null;
+          if (pagesWrap) {
+            pagesWrap.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+            pagesWrap.addEventListener('touchend', function (e) {
+              if (touchStartX === null) return;
+              var dx = e.changedTouches[0].clientX - touchStartX;
+              if (Math.abs(dx) > 40) {
+                if (dx < 0) goTo(current + 1, 'next');
+                else goTo(current - 1, 'prev');
+              }
+              touchStartX = null;
+            }, { passive: true });
+          }
+
+          if (slider && sliderTooltip && sliderTrack) {
+            function updateTooltip(percent) {
+              sliderTooltip.textContent = Math.round(percent * 100) + '%';
+            }
+            slider.addEventListener('input', function () {
+              sliderTrack.classList.add('dragging');
+              updateTooltip(slider.value / 1000);
+            });
+            slider.addEventListener('change', function () {
+              var targetPage = Math.round((slider.value / 1000) * (total - 1));
+              goTo(targetPage);
+              sliderTrack.classList.remove('dragging');
+            });
+          }
+
+          render();
+        });
+      }
+
+      /* ============================================================
+         책(nw-book) 안 blockquote: <br> 기준으로 줄을 쪼개서
+         각 줄마다 첫 줄 들여쓰기가 적용되도록 변환
+         ============================================================ */
+      if (articleBody) (function () {
+        articleBody.querySelectorAll('.nw-book-page blockquote').forEach(function (bq) {
+          var children = Array.prototype.slice.call(bq.childNodes);
+          var frag = document.createDocumentFragment();
+          var lineWrapper = document.createElement('span');
+          lineWrapper.className = 'nw-quote-line';
+
+          children.forEach(function (node) {
+            if (node.nodeName === 'BR') {
+              frag.appendChild(lineWrapper);
+              lineWrapper = document.createElement('span');
+              lineWrapper.className = 'nw-quote-line';
+            } else {
+              lineWrapper.appendChild(node);
+            }
+          });
+          frag.appendChild(lineWrapper);
+
+          bq.innerHTML = '';
+          bq.appendChild(frag);
+        });
+      })();
+
+      /* ============================================================
+         자동 목차 생성 (#article-body 안의 h3/h4 스캔)
+         ============================================================ */
+      if (articleBody && !articleBody.querySelector('.nw-toc')) {
+        var tocHeadings = Array.prototype.filter.call(
+          articleBody.querySelectorAll('h3, h4'),
+          function (h) { return !EXCLUDED_HEADING_PATTERN.test(h.textContent.trim()); }
+        );
+
+        if (tocHeadings.length > 1) {
+          var tocList = document.createElement('ol');
+          var currentH3Item = null;
+          var h3Count = 0;
+          var h4Count = 0;
+
+          tocHeadings.forEach(function (h) {
+            if (!h.id) h.id = 'atoc-' + Math.random().toString(36).slice(2, 8);
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = cleanHeadingText(h);
+
+            if (h.tagName === 'H3') {
+              h3Count += 1;
+              h4Count = 0;
+              var span3 = document.createElement('span');
+              span3.textContent = h3Count + '. ';
+              li.appendChild(span3);
+              li.appendChild(a);
+              tocList.appendChild(li);
+              currentH3Item = li;
+              currentH3Item.subList = document.createElement('ol');
+            } else {
+              h4Count += 1;
+              var span4 = document.createElement('span');
+              span4.textContent = (h3Count || 1) + '.' + h4Count + '. ';
+              li.appendChild(span4);
+              li.appendChild(a);
+              if (currentH3Item) {
+                if (!currentH3Item.contains(currentH3Item.subList)) currentH3Item.appendChild(currentH3Item.subList);
+                currentH3Item.subList.appendChild(li);
+              } else {
+                tocList.appendChild(li);
+              }
+            }
+          });
+
+          var tocNav = document.createElement('nav');
+          tocNav.className = 'nw-toc';
+          var tocTitle = document.createElement('b');
+          tocTitle.textContent = '목차';
+          tocNav.appendChild(tocTitle);
+          tocNav.appendChild(tocList);
+          articleBody.insertBefore(tocNav, articleBody.firstChild);
+        }
+      }
+
+      /* ============================================================
+         플로팅 스크롤스파이 목차
+         ============================================================ */
+      var floatToc = document.getElementById('nw-floating-toc');
+      if (articleBody && floatToc && window.innerWidth > 1450) {
+        var floatHeadings = Array.prototype.filter.call(
+          articleBody.querySelectorAll('h3, h4'),
+          function (h) { return !EXCLUDED_HEADING_PATTERN.test(h.textContent.trim()); }
+        );
+
+        if (floatHeadings.length > 1) {
+          floatHeadings.forEach(function (h, i) {
+            if (!h.id) h.id = 'ftoc-' + i + '-' + Math.random().toString(36).slice(2, 6);
+            var a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = cleanHeadingText(h);
+            if (h.tagName === 'H4') a.classList.add('nw-floating-toc-h4');
+            floatToc.appendChild(a);
+          });
+          floatToc.style.display = 'flex';
+
+          var floatLinks = floatToc.querySelectorAll('a');
+          var floatObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              var link = floatToc.querySelector('a[href="#' + entry.target.id + '"]');
+              if (!link) return;
+              floatLinks.forEach(function (a) { a.classList.remove('active'); });
+              link.classList.add('active');
+            });
+          }, { rootMargin: '-200px 0px -40% 0px', threshold: 0 });
+
+          floatHeadings.forEach(function (h) { floatObserver.observe(h); });
+        }
+      }
+
+      /* ============================================================
+         최근 본 문서 (localStorage)
+         ============================================================ */
+      (function () {
+        var STORAGE_KEY = 'nw-recent-docs';
+        var MAX_ITEMS = 5;
+
+        if (titleEl) {
+          var list = [];
+          try { list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { list = []; }
+          list = list.filter(function (item) { return item.href !== currentHref; });
+          list.unshift({ title: currentTitle, href: currentHref });
+          list = list.slice(0, MAX_ITEMS);
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) { }
+        }
+
+        var recentBox = document.getElementById('nw-recent-box');
+        var recentList = document.getElementById('nw-recent-list');
+        if (!recentBox || !recentList) return;
+
+        var savedList = [];
+        try { savedList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { savedList = []; }
+        var displayList = savedList.filter(function (item) { return item.href !== currentHref; });
+        if (!displayList.length) return;
+
+        recentList.innerHTML = '';
+        displayList.forEach(function (item) {
+          var a = document.createElement('a');
+          a.href = item.href;
+          a.textContent = item.title;
+          recentList.appendChild(a);
+        });
+        recentBox.style.display = 'block';
+      })();
+
+      /* ============================================================
+         즐겨찾기(북마크)
+         ============================================================ */
+      (function () {
+        var KEY = 'nw-bookmarks';
+        function getList() {
+          try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+        }
+        function setList(list) {
+          try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) { }
+        }
+
+        var btn = document.getElementById('nw-bookmark-btn');
+        if (btn && titleEl) {
+          var list = getList();
+          if (list.some(function (i) { return i.href === currentHref; })) btn.classList.add('active');
+
+          btn.addEventListener('click', function () {
+            list = getList();
+            var idx = list.findIndex(function (i) { return i.href === currentHref; });
+            if (idx >= 0) {
+              list.splice(idx, 1);
+              btn.classList.remove('active');
+            } else {
+              list.unshift({ title: currentTitle, href: currentHref });
+              btn.classList.add('active');
+            }
+            setList(list);
+            renderBookmarkBox();
+          });
+        }
+
+        function renderBookmarkBox() {
+          var box = document.getElementById('nw-bookmark-box');
+          var listEl = document.getElementById('nw-bookmark-list');
+          if (!box || !listEl) return;
+          var list = getList();
+          if (!list.length) { box.style.display = 'none'; return; }
+          listEl.innerHTML = '';
+          list.forEach(function (item) {
+            var a = document.createElement('a');
+            a.href = item.href;
+            a.textContent = item.title;
+            listEl.appendChild(a);
+          });
+          box.style.display = 'block';
+        }
+        renderBookmarkBox();
+      })();
+
+      /* ============================================================
+         자동 위키링크
+         ============================================================ */
+      if (articleBody) window.nwDataPromise.then(function (data) {
+        var wikiDict = data.wikiDict || {};
+
+        var excludeList = [];
+        var entries = [];
+        Object.keys(wikiDict).forEach(function (term) {
+          entries.push({ term: term, href: wikiDict[term], exclude: false });
+        });
+        excludeList.forEach(function (term) {
+          entries.push({ term: term, href: null, exclude: true });
+        });
+        entries.sort(function (a, b) { return b.term.length - a.term.length; });
+        if (!entries.length) return;
+
+        /* 특정 단어를 포함하지만 링크되면 안 되는 구문 */
+        var excludeList = [
+          "페어리테일"
+        ];
+
+        var entries = [];
+        Object.keys(wikiDict).forEach(function (term) {
+          entries.push({ term: term, href: wikiDict[term], exclude: false });
+        });
+        excludeList.forEach(function (term) {
+          entries.push({ term: term, href: null, exclude: true });
+        });
+        entries.sort(function (a, b) { return b.term.length - a.term.length; });
+        if (!entries.length) return;
+
+        var matchRegex = new RegExp(entries.map(function (e) { return escapeRegExp(e.term); }).join('|'), 'g');
+        var entryByTerm = {};
+        entries.forEach(function (e) { entryByTerm[e.term] = e; });
+        var used = {};
+
+        function isExcludedElement(node) {
+          return !!node.closest(
+            'a, .nw-toc, .nw-dict-table, .nw-navbox, .nw-timeline-era, ' +
+            'h1, h2, h3, h4, .nw-title, .nw-cat-badge, [id^="footnote_"]'
+          );
+        }
+        function markIfBroken(a, href) {
+          if (href === '/') a.classList.add('wiki-link-broken');
+        }
+
+        /* 1) placeholder(href="#") 링크를 실제 주소로 교체 */
+        articleBody.querySelectorAll('a[href="#"]').forEach(function (a) {
+          var entry = entryByTerm[a.textContent.trim()];
+          if (entry && !entry.exclude) {
+            a.setAttribute('href', entry.href);
+            a.classList.add('wiki-link');
+            markIfBroken(a, entry.href);
+          }
+        });
+
+        /* 2) 본문 텍스트 자동 링크 */
+        articleBody.querySelectorAll('p, td, blockquote').forEach(function (p) {
+          if (isExcludedElement(p)) return;
+
+          var walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null, false);
+          var textNodes = [];
+          var tn;
+          while ((tn = walker.nextNode())) {
+            if (!isExcludedElement(tn.parentElement)) textNodes.push(tn);
+          }
+
+          textNodes.forEach(function (textNode) {
+            var text = textNode.nodeValue;
+            matchRegex.lastIndex = 0;
+            var segments = [];
+            var m;
+
+            while ((m = matchRegex.exec(text))) {
+              var matchedTerm = m[0];
+              var start = m.index;
+              var prevChar = start > 0 ? text[start - 1] : '';
+              if (isHangul(prevChar)) continue;
+
+              var entry = entryByTerm[matchedTerm];
+              if (!entry || entry.exclude || used[matchedTerm]) continue;
+
+              segments.push({ start: start, end: start + matchedTerm.length, term: matchedTerm, href: entry.href });
+              used[matchedTerm] = true;
+            }
+            if (!segments.length) return;
+
+            var frag = document.createDocumentFragment();
+            var cursor = 0;
+            segments.forEach(function (seg) {
+              if (seg.start > cursor) frag.appendChild(document.createTextNode(text.slice(cursor, seg.start)));
+              var a = document.createElement('a');
+              a.className = 'wiki-link';
+              a.href = seg.href;
+              a.textContent = seg.term;
+              markIfBroken(a, seg.href);
+              frag.appendChild(a);
+              cursor = seg.end;
+            });
+            if (cursor < text.length) frag.appendChild(document.createTextNode(text.slice(cursor)));
+            textNode.parentNode.replaceChild(frag, textNode);
+          });
+        });
+      });
+
+      /* ============================================================
+       말줄임표(...) → 가운뎃점(···) 치환 (7개일 땐 6개만 변환 + 마침표 1개 유지)
+       ============================================================ */
+      if (articleBody) (function () {
+        var walker = document.createTreeWalker(articleBody, NodeFilter.SHOW_TEXT, null, false);
+        var nodes = [];
+        var n;
+        while ((n = walker.nextNode())) {
+          if (n.parentElement.closest('a, code, script, style')) continue;
+          if (/\.{3,}/.test(n.nodeValue)) nodes.push(n);
+        }
+        nodes.forEach(function (node) {
+          node.nodeValue = node.nodeValue.replace(/\.{3,}/g, function (match) {
+            if (match.length === 7) return '·'.repeat(6) + '.';
+            return '·'.repeat(match.length);
+          });
+        });
+      })();
+
+
+      /* ============================================================
+         검색어 하이라이트
+         ============================================================ */
+      (function () {
+        var searchForm = document.querySelector('.nw-search');
+        var KEY = 'nw-last-search-term';
+
+        if (searchForm) {
+          searchForm.addEventListener('submit', function () {
+            var input = searchForm.querySelector('input[name="q"]');
+            if (input && input.value.trim()) {
+              try { sessionStorage.setItem(KEY, input.value.trim()); } catch (e) { }
+            }
+          });
+        }
+        if (!articleBody) return;
+
+        var term = '';
+        try { term = sessionStorage.getItem(KEY) || ''; } catch (e) { }
+        if (!term) return;
+
+        var re = new RegExp(escapeRegExp(term), 'gi');
+        var walker = document.createTreeWalker(articleBody, NodeFilter.SHOW_TEXT, null, false);
+        var nodes = [];
+        var n;
+        while ((n = walker.nextNode())) {
+          if (n.parentElement.closest('a, script, style')) continue;
+          if (re.test(n.nodeValue)) nodes.push(n);
+        }
+
+        nodes.forEach(function (node) {
+          re.lastIndex = 0;
+          var text = node.nodeValue;
+          var frag = document.createDocumentFragment();
+          var lastIdx = 0;
+          var m;
+          while ((m = re.exec(text))) {
+            if (m.index > lastIdx) frag.appendChild(document.createTextNode(text.slice(lastIdx, m.index)));
+            var mark = document.createElement('mark');
+            mark.className = 'nw-search-hl';
+            mark.textContent = m[0];
+            frag.appendChild(mark);
+            lastIdx = m.index + m[0].length;
+          }
+          if (lastIdx < text.length) frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+          node.parentNode.replaceChild(frag, node);
+        });
+      })();
+
+      /* ============================================================
+       각주 호버 미리보기 + 브라우저 네이티브 title 툴팁 차단
+       + 티스토리 자체 각주 팝업(노란 박스) 강제 제거
+       ============================================================ */
+      if (articleBody) (function () {
+        var markers = articleBody.querySelectorAll('a[href^="#footnote_"]:not([href^="#footnote_link_"])');
+        if (!markers.length) return;
+
+        var tooltip = document.createElement('div');
+        tooltip.className = 'nw-footnote-tooltip';
+        tooltip.setAttribute('role', 'tooltip');
+        document.body.appendChild(tooltip);
+
+        /* 마우스가 닿는 즉시(캡처 단계) title을 지워서 브라우저 기본 노란 툴팁이
+           뜰 조건 자체를 없앰 */
+        document.addEventListener('mouseover', function (e) {
+          var el = e.target;
+          while (el && el.nodeType === 1) {
+            if (el.hasAttribute('title')) el.removeAttribute('title');
+            el = el.parentElement;
+          }
+        }, true);
+
+        /* 페이지 로드 시점에도 한 번 선제적으로 제거 (이중 안전장치) */
+        function stripTitles() {
+          articleBody.querySelectorAll(
+            'a[href^="#footnote_"], a[href^="#footnote_"] *, [id^="footnote_"], [id^="footnote_"] *'
+          ).forEach(function (el) { if (el.hasAttribute('title')) el.removeAttribute('title'); });
+        }
+        stripTitles();
+        new MutationObserver(stripTitles).observe(articleBody, { attributes: true, attributeFilter: ['title'], subtree: true });
+
+        /* 티스토리 자체 각주 미리보기 팝업(노란 말풍선) 강제 제거
+           - title 속성이 아니라 티스토리 자체 스크립트가 body 하위에 직접
+             그려주는 별도 DOM 요소라 title 제거만으론 안 없어짐
+           - body에 새로 삽입되는 노드를 감시하다가, "각주 N" 패턴으로 시작하고
+             우리가 만든 tooltip이 아니면 즉시 제거함 */
+        var nativePopupObserver = new MutationObserver(function (mutations) {
+          mutations.forEach(function (m) {
+            m.addedNodes.forEach(function (node) {
+              if (node.nodeType !== 1) return;
+              if (node === tooltip || tooltip.contains(node)) return;
+              if (articleBody.contains(node)) return; /* 본문 안의 정상 각주 목록은 건드리지 않음 */
+              var txt = (node.textContent || '').trim();
+              if (/^각주\s*\d+/.test(txt)) node.remove();
+            });
+          });
+        });
+        nativePopupObserver.observe(document.body, { childList: true, subtree: true });
+
+        var hideTimer = null;
+
+        function getFootnoteText(marker) {
+          var id = (marker.getAttribute('href') || '').slice(1);
+          var target = id ? document.getElementById(id) : null;
+          if (!target) return '';
+          var clone = target.cloneNode(true);
+          var backLink = clone.querySelector('a[href^="#footnote_link_"]');
+          if (backLink) backLink.remove();
+          return clone.textContent.replace(/\s+/g, ' ').trim();
+        }
+        function positionTooltip(marker) {
+          var rect = marker.getBoundingClientRect();
+          requestAnimationFrame(function () {
+            var tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+            var left = Math.max(8, Math.min(rect.left + rect.width / 2 - tw / 2, window.innerWidth - tw - 8));
+            var top = rect.top - th - 8;
+            if (top < 8) top = rect.bottom + 8;
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+          });
+        }
+        function showTooltip(marker) {
+          clearTimeout(hideTimer);
+          var text = getFootnoteText(marker);
+          if (!text) return;
+          tooltip.innerHTML = '';
+          var numSpan = document.createElement('span');
+          numSpan.className = 'num';
+          numSpan.textContent = marker.textContent.trim() + '.';
+          tooltip.appendChild(numSpan);
+          tooltip.appendChild(document.createTextNode(' ' + text));
+          tooltip.classList.add('visible');
+          positionTooltip(marker);
+        }
+        function scheduleHide() {
+          hideTimer = setTimeout(function () { tooltip.classList.remove('visible'); }, 100);
+        }
+
+        markers.forEach(function (marker) {
+          marker.addEventListener('mouseenter', function () { showTooltip(marker); });
+          marker.addEventListener('mouseleave', scheduleHide);
+          marker.addEventListener('focus', function () { showTooltip(marker); });
+          marker.addEventListener('blur', scheduleHide);
+          marker.addEventListener('click', function (e) {
+            e.preventDefault();
+            tooltip.classList.contains('visible') ? tooltip.classList.remove('visible') : showTooltip(marker);
+          });
+        });
+        tooltip.addEventListener('mouseenter', function () { clearTimeout(hoverCloseTimer); });
+        tooltip.addEventListener('mouseleave', function () { scheduleHoverClose(); });
+        document.addEventListener('scroll', function () { tooltip.classList.remove('visible'); }, true);
+        document.addEventListener('click', function (e) {
+          if (!tooltip.contains(e.target) && e.target.closest && !e.target.closest('a[href^="#footnote_"]')) {
+            tooltip.classList.remove('visible');
+          }
+        });
+      })();
+      /* ============================================================
+         홈 화면 위키 현황 (총 문서/카테고리 수 + 랜덤 명대사)
+         ============================================================ */
+      (function () {
+        var statsBox = document.getElementById('nw-hero-stats');
+        if (!statsBox) return;
+
+        var categoryScope = document.querySelector('#nw-sidebar-category .nw-category-tree');
+        var allLinks = categoryScope ? Array.prototype.slice.call(categoryScope.querySelectorAll('a')) : [];
+        var totalLink = allLinks.find(function (a) { return a.textContent.indexOf('전체보기') !== -1; });
+        var totalMatch = totalLink && totalLink.textContent.match(/\((\d+)\)/);
+        var totalCount = totalMatch ? totalMatch[1] : null;
+        var catCount = allLinks.filter(function (a) {
+          return a.textContent.indexOf('전체보기') === -1 && /\(\d+\)/.test(a.textContent);
+        }).length;
+
+        window.nwDataPromise.then(function (data) {
+          var quotes = data.quotes || [];
+          var lines = [];
+          if (totalCount) {
+            lines.push('<span class="nw-hero-stats-count">총 문서 <b>' + totalCount + '</b>개 · 카테고리 <b>' + catCount + '</b>개</span>');
+          }
+          if (quotes.length) {
+            var LAST_QUOTE_KEY = 'nw-last-quote';
+            var lastQuote = '';
+            try { lastQuote = localStorage.getItem(LAST_QUOTE_KEY) || ''; } catch (e) { }
+
+            var pool = quotes.filter(function (q) { return q.text !== lastQuote; });
+            if (!pool.length) pool = quotes; // 문구가 1개뿐이면 그냥 그거라도 보여줌
+
+            var q = pool[Math.floor(Math.random() * pool.length)];
+            lines.push('<span class="nw-hero-quote">"' + q.text + '"</span><span>— ' + q.from + '</span>');
+
+            try { localStorage.setItem(LAST_QUOTE_KEY, q.text); } catch (e) { }
+          }
+          if (lines.length) statsBox.innerHTML = lines.join('');
+        });
+      })();
+
+      /* ============================================================
+         링크 복사 버튼
+         ============================================================ */
+      (function () {
+        var copyBtn = document.getElementById('nw-copy-link-btn');
+        if (!copyBtn) return;
+
+        var toast = document.createElement('div');
+        toast.className = 'nw-toast';
+        toast.textContent = '링크가 복사되었습니다';
+        document.body.appendChild(toast);
+
+        var hideTimer = null;
+        function showToast() {
+          clearTimeout(hideTimer);
+          toast.classList.add('visible');
+          hideTimer = setTimeout(function () {
+            toast.classList.remove('visible');
+          }, 1800);
+        }
+
+        copyBtn.addEventListener('click', function () {
+          var url = location.href;
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(showToast).catch(fallbackCopy);
+          } else {
+            fallbackCopy();
+          }
+
+          function fallbackCopy() {
+            var textarea = document.createElement('textarea');
+            textarea.value = url;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try { document.execCommand('copy'); } catch (e) { }
+            document.body.removeChild(textarea);
+            showToast();
+          }
+        });
+      })();
+
+      /* ============================================================
+         맨 위로 / 맨 아래로 스크롤 버튼
+         ============================================================ */
+      (function () {
+        var topBtn = document.getElementById('nw-scroll-top-btn');
+        var bottomBtn = document.getElementById('nw-scroll-bottom-btn');
+        if (!topBtn && !bottomBtn) return;
+
+        var SHOW_AFTER = 400; // 이 픽셀만큼 스크롤하면 버튼이 나타남
+
+        function nearBottom() {
+          return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 40;
+        }
+
+        function updateVisibility() {
+          var scrolled = window.scrollY > SHOW_AFTER;
+          if (topBtn) topBtn.classList.toggle('visible', scrolled);
+          /* 이미 맨 아래 근처면 "맨 아래로" 버튼은 굳이 안 보이게 함 */
+          if (bottomBtn) bottomBtn.classList.toggle('visible', scrolled && !nearBottom());
+        }
+
+        document.addEventListener('scroll', updateVisibility, { passive: true });
+        window.addEventListener('resize', updateVisibility);
+        updateVisibility();
+
+        if (topBtn) {
+          topBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+        if (bottomBtn) {
+          bottomBtn.addEventListener('click', function () {
+            window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+          });
+        }
+      })();
+
+
+      if (articleBody) (function () {
+        function isAtBlockStart(textNode) {
+          var el = textNode.previousSibling;
+          while (el) {
+            if (el.nodeType === 3 && el.nodeValue.trim() !== '') return false;
+            if (el.nodeType === 1) return false;
+            el = el.previousSibling;
+          }
+          var parent = textNode.parentElement;
+          while (parent && !/^(P|BLOCKQUOTE|LI|TD|TH|H3|H4|DIV|DD|DT)$/.test(parent.tagName)) {
+            var s = parent.previousSibling;
+            while (s) {
+              if (s.nodeType === 3 && s.nodeValue.trim() !== '') return false;
+              if (s.nodeType === 1) return false;
+              s = s.previousSibling;
+            }
+            parent = parent.parentElement;
+          }
+          return true;
+        }
+
+        var walker = document.createTreeWalker(articleBody, NodeFilter.SHOW_TEXT, null, false);
+        var nodes = [];
+        var n;
+        while ((n = walker.nextNode())) {
+          if (n.parentElement.closest('a, code, script, style')) continue;
+          if (n.nodeValue.indexOf('"') !== -1 || n.nodeValue.indexOf("'") !== -1) nodes.push(n);
+        }
+
+        var quoteIndex = 0;
+        var singleQuoteIndex = 0;
+
+        nodes.forEach(function (node) {
+          var text = node.nodeValue;
+          var atStart = isAtBlockStart(node); // 이 텍스트 노드가 블록의 맨 앞인지 미리 판단
+          var frag = document.createDocumentFragment();
+          var buffer = '';
+
+          function flushBuffer() {
+            if (buffer) {
+              frag.appendChild(document.createTextNode(buffer));
+              buffer = '';
+            }
+          }
+
+          for (var i = 0; i < text.length; i++) {
+            var ch = text[i];
+            if (ch === '"' || ch === "'") {
+              var isFirstCharOfNode = (buffer === '' && frag.childNodes.length === 0);
+              flushBuffer();
+              var span = document.createElement('span');
+              var isOpen;
+              if (ch === '"') {
+                quoteIndex += 1;
+                isOpen = (quoteIndex % 2 === 1);
+                span.textContent = isOpen ? '\u201C' : '\u201D';
+              } else {
+                singleQuoteIndex += 1;
+                isOpen = (singleQuoteIndex % 2 === 1);
+                span.textContent = isOpen ? '\u2018' : '\u2019';
+              }
+              span.className = 'nw-smart-quote ' + (isOpen ? 'nw-smart-quote-open' : 'nw-smart-quote-close');
+              if (isOpen && atStart && isFirstCharOfNode) {
+                span.classList.add('nw-quote-at-start');
+              }
+              frag.appendChild(span);
+            } else {
+              buffer += ch;
+            }
+          }
+          flushBuffer();
+          node.parentNode.replaceChild(frag, node);
+        });
+      })();
+
+      /* ============================================================
+       배경음악(BGM) 플레이어 - 유튜브 버전
+       ============================================================ */
+      (function () {
+        var playerEl = document.getElementById('nw-bgm-player');
+        var ytMount = document.getElementById('nw-bgm-yt');
+        if (!playerEl || !ytMount) return;
+
+        var toggleBtn = document.getElementById('nw-bgm-toggle');
+        var titleEl = document.getElementById('nw-bgm-title');
+        var playBtn = document.getElementById('nw-bgm-play');
+        var playIcon = document.getElementById('nw-bgm-play-icon');
+        var prevBtn = document.getElementById('nw-bgm-prev');
+        var nextBtn = document.getElementById('nw-bgm-next');
+        var progress = document.getElementById('nw-bgm-progress');
+        var progressFill = document.getElementById('nw-bgm-progress-fill');
+        var volumeInput = document.getElementById('nw-bgm-volume');
+
+        var STORAGE_KEY = 'nw-bgm-state';
+        /* time: 마지막 재생 위치(초), playing: 이동 직전에 재생 중이었는지 */
+        var state = { index: 0, volume: 60, collapsed: true, time: 0, playing: false };
+        try {
+          var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+          state = Object.assign(state, saved);
+        } catch (e) { }
+
+        function saveState() {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { }
+        }
+
+        function setPlayIcon(playing) {
+          playIcon.innerHTML = playing
+            ? '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>'
+            : '<path d="M8 5v14l11-7z"/>';
+        }
+
+        toggleBtn.addEventListener('click', function () {
+          state.collapsed = !state.collapsed;
+          playerEl.classList.toggle('collapsed', state.collapsed);
+          saveState();
+        });
+        playerEl.classList.toggle('collapsed', state.collapsed);
+
+        volumeInput.value = state.volume;
+        volumeInput.addEventListener('input', function () {
+          state.volume = parseInt(volumeInput.value, 10);
+          if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(state.volume);
+          saveState();
+        });
+
+        function extractVideoId(raw) {
+          if (!raw) return '';
+          var m = raw.match(/(?:youtu\.be\/|v=|\/embed\/)([A-Za-z0-9_-]{11})/);
+          return m ? m[1] : raw.trim();
+        }
+
+        var ytPlayer = null;
+        var progressTimer = null;
+        var resumedOnce = false;
+
+        /* ── 다른 탭/창의 BGM과 겹치지 않게 하기 위한 동기화 ── */
+        var TAB_ID = Math.random().toString(36).slice(2) + '-' + Date.now();
+        var myPlayTs = 0; // 내가 마지막으로 재생을 시작한 시각
+        var bgmChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('nw-bgm-sync') : null;
+
+        function broadcastPlaying() {
+          myPlayTs = Date.now();
+          var msg = { type: 'playing', tabId: TAB_ID, ts: myPlayTs };
+          if (bgmChannel) {
+            bgmChannel.postMessage(msg);
+          } else {
+            try { localStorage.setItem('nw-bgm-sync', JSON.stringify(msg)); } catch (e) { }
+          }
+        }
+
+        function handleIncomingSync(msg) {
+          if (!msg || msg.tabId === TAB_ID || msg.type !== 'playing') return;
+          /* 더 나중에 재생을 시작한 탭이 우선권을 가짐(동시 시작 시 충돌 방지) */
+          if (msg.ts < myPlayTs) return;
+          if (ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === 1) {
+            ytPlayer.pauseVideo();
+          }
+        }
+
+        if (bgmChannel) {
+          bgmChannel.addEventListener('message', function (e) { handleIncomingSync(e.data); });
+        } else {
+          window.addEventListener('storage', function (e) {
+            if (e.key !== 'nw-bgm-sync' || !e.newValue) return;
+            try { handleIncomingSync(JSON.parse(e.newValue)); } catch (err) { }
+          });
+        }
+
+        Promise.resolve(window.nwDataPromise).then(function (data) {
+          var PLAYLIST = data.playlist || [];
+          if (!PLAYLIST.length) return;
+
+          if (!Number.isInteger(state.index) || state.index < 0 || state.index >= PLAYLIST.length) {
+            state.index = 0;
+          }
+
+          function updateTitle() {
+            var track = PLAYLIST[state.index];
+            titleEl.textContent = track.title + (track.artist ? ' - ' + track.artist : '');
+          }
+
+          function loadTrack(idx, autoplay) {
+            state.index = ((idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
+            state.time = 0; /* 곡을 직접 바꾸면 이어듣기 위치는 초기화 */
+            updateTitle();
+            saveState();
+            if (!ytPlayer) return;
+            var vid = extractVideoId(PLAYLIST[state.index].id);
+            if (autoplay) ytPlayer.loadVideoById(vid);
+            else ytPlayer.cueVideoById(vid);
+          }
+
+          prevBtn.addEventListener('click', function () {
+            var wasPlaying = ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === 1;
+            loadTrack(state.index - 1, wasPlaying);
+          });
+          nextBtn.addEventListener('click', function () {
+            var wasPlaying = ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === 1;
+            loadTrack(state.index + 1, wasPlaying);
+          });
+          playBtn.addEventListener('click', function () {
+            if (!ytPlayer) return;
+            var s = ytPlayer.getPlayerState();
+            if (s === 1) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+          });
+          progress.addEventListener('click', function (e) {
+            if (!ytPlayer) return;
+            var rect = progress.getBoundingClientRect();
+            var pct = (e.clientX - rect.left) / rect.width;
+            var duration = ytPlayer.getDuration();
+            if (duration) ytPlayer.seekTo(pct * duration, true);
+          });
+
+          function startProgressLoop() {
+            clearInterval(progressTimer);
+            var saveCounter = 0;
+            progressTimer = setInterval(function () {
+              if (!ytPlayer || !ytPlayer.getDuration) return;
+              var d = ytPlayer.getDuration();
+              var c = ytPlayer.getCurrentTime();
+              if (d) progressFill.style.width = (c / d * 100) + '%';
+
+              /* 재생 중일 때만 0.5초 * 6 = 3초마다 위치 저장 (너무 자주 쓰지 않도록) */
+              if (ytPlayer.getPlayerState && ytPlayer.getPlayerState() === 1) {
+                saveCounter += 1;
+                if (saveCounter >= 6) {
+                  saveCounter = 0;
+                  state.time = c;
+                  state.playing = true;
+                  saveState();
+                }
+              }
+            }, 500);
+          }
+
+          function tryResume() {
+            if (resumedOnce) return;
+            resumedOnce = true;
+            if (!state.playing || !state.time) return;
+
+            ytPlayer.seekTo(state.time, true);
+            ytPlayer.playVideo();
+
+            /* 자동재생이 브라우저에 의해 막혔는지 0.9초 뒤 확인 */
+            setTimeout(function () {
+              if (ytPlayer.getPlayerState() !== 1) {
+                /* 막혔으면: 위치는 이미 맞춰놨으니, 플레이어를 펼쳐서
+                   "여기 눌러서 이어듣기" 상태라는 걸 시각적으로 알려줌 */
+                state.collapsed = false;
+                playerEl.classList.remove('collapsed');
+                playerEl.classList.add('nw-bgm-resume-hint');
+                setTimeout(function () { playerEl.classList.remove('nw-bgm-resume-hint'); }, 2600);
+              }
+            }, 900);
+          }
+
+          function onPlayerReady(e) {
+            e.target.setVolume(state.volume);
+            e.target.cueVideoById(extractVideoId(PLAYLIST[state.index].id));
+            updateTitle();
+            startProgressLoop();
+          }
+
+          function onPlayerStateChange(e) {
+            if (e.data === YT.PlayerState.PLAYING) {
+              setPlayIcon(true);
+              state.playing = true;
+              saveState();
+              broadcastPlaying();
+            } else if (e.data === YT.PlayerState.PAUSED) {
+              setPlayIcon(false);
+              state.playing = false;
+              state.time = ytPlayer.getCurrentTime();
+              saveState();
+            } else if (e.data === YT.PlayerState.ENDED) {
+              loadTrack(state.index + 1, true);
+            } else if (e.data === YT.PlayerState.CUED) {
+              /* cueVideoById 직후(로딩 완료) 시점에 이어재생 시도 */
+              tryResume();
+            }
+          }
+
+          /* 사용자가 페이지 안 아무 곳이나 한 번 클릭/터치하면, 그 시점에도
+             혹시 못 튼 이어재생을 다시 시도 (자동재생 정책이 상호작용 이후엔
+             풀리는 브라우저가 많음) */
+          function retryOnFirstInteraction() {
+            document.removeEventListener('click', retryOnFirstInteraction);
+            document.removeEventListener('touchstart', retryOnFirstInteraction);
+            if (ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() !== 1 && state.playing) {
+              ytPlayer.playVideo();
+            }
+          }
+          document.addEventListener('click', retryOnFirstInteraction);
+          document.addEventListener('touchstart', retryOnFirstInteraction);
+
+          window.onYouTubeIframeAPIReady = function () {
+            ytPlayer = new YT.Player(ytMount, {
+              height: '1',
+              width: '1',
+              videoId: extractVideoId(PLAYLIST[state.index].id),
+              playerVars: {
+                controls: 0,
+                disablekb: 1,
+                origin: window.location.origin
+              },
+              events: {
+                onReady: onPlayerReady,
+                onStateChange: onPlayerStateChange
+              }
+            });
+          };
+
+          if (!window.YT) {
+            var tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+          } else {
+            window.onYouTubeIframeAPIReady();
+          }
+        });
+      })();
+
+      /* 지도 */
+      (function () {
+        var mapWrap = document.getElementById('nw-map-1');
+        if (!mapWrap) return;
+
+        var MAP_ERAS = {
+          '270': {
+            label: '270년',
+            img: 'https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/ArundMap_270_high.jpg',
+            pins: [
+              {
+                name: '이스나미르',
+                desc: '', href: '/29',
+                border: [
+                  [[70.7, 51.7], [71.5, 52.3], [70.3, 52.8], [70.4, 53.4], [68.7, 53.8], [69.7, 54.6], [69.8, 55.6], [70.0, 56.2], [70.5, 55.5], [71.4, 55.5], [71.1, 56.3], [71.6, 56.2], [71.8, 56.6], [72.1, 55.5], [72.6, 55.5], [72.5, 54.3], [73.5, 54.3], [73.6, 53.5], [74.2, 53.0], [74.5, 52.1], [75.2, 52.7], [74.7, 53.5], [74.3, 53.8], [74.5, 54.6], [74.0, 54.6], [74.2, 55.1], [73.4, 55.1], [74.0, 56.0], [73.2, 56.4], [73.2, 57.2], [72.1, 57.4], [72.9, 58.2], [72.6, 58.8], [72.6, 59.2], [72.2, 59.4], [71.7, 61.2], [72.8, 60.7], [73.4, 61.1], [73.2, 62.1], [73.5, 63.1], [72.4, 64.7], [73.3, 64.2], [74.2, 63.3], [74.5, 64.1], [75.0, 62.9], [75.4, 63.4], [75.9, 63.0], [75.7, 61.9], [76.5, 62.0], [76.8, 61.6], [77.6, 60.7], [77.5, 61.8], [77.1, 63.1], [77.9, 62.2], [78.2, 62.5], [78.6, 61.6], [79.0, 61.2], [79.2, 60.3], [79.7, 60.8], [80.7, 60.5], [81.2, 61.3], [81.7, 61.4], [81.2, 60.1], [80.7, 58.9], [81.4, 58.5], [82.0, 58.0], [82.5, 57.5], [82.8, 58.0], [83.5, 57.7], [84.3, 58.1], [84.4, 58.7], [84.6, 59.3], [84.2, 59.5], [84.9, 59.7], [84.7, 58.5], [85.2, 58.1], [84.9, 57.1], [85.6, 56.7], [85.6, 55.2], [86.5, 53.3], [86.6, 50.1], [87.0, 48.0], [85.9, 44.5], [84.8, 43.5], [84.5, 42.7], [83.8, 42.5], [83.0, 40.8], [82.2, 41.4], [81.5, 41.1], [82.7, 39.8], [83.3, 38.6], [82.9, 38.1], [83.3, 37.2], [83.0, 36.0], [82.9, 34.7], [83.5, 36.3], [83.7, 37.1], [84.1, 36.1], [84.9, 33.6], [85.7, 33.8], [86.3, 33.0], [87.0, 33.8], [87.6, 33.2], [88.3, 33.2], [88.4, 32.4], [88.8, 32.4], [88.9, 31.3], [89.3, 30.8], [90.1, 29.8], [90.1, 27.5], [89.2, 26.8], [89.1, 26.1], [88.7, 26.0], [87.9, 25.3], [86.3, 25.4], [85.4, 25.4], [85.0, 26.1], [84.4, 25.5], [83.9, 24.9], [83.4, 24.9], [83.1, 24.5], [82.7, 25.2], [82.2, 25.1], [81.6, 24.4], [81.2, 21.8], [80.6, 21.2], [79.1, 21.3], [77.7, 21.9], [77.6, 24.3], [76.1, 24.8], [75.5, 24.0], [75.4, 25.2], [75.1, 26.5], [74.7, 28.0], [75.1, 29.3], [75.6, 30.3], [75.1, 32.3], [74.7, 33.6], [75.0, 35.8], [73.7, 37.7], [72.5, 36.7], [70.6, 36.3], [71.6, 37.7], [72.0, 39.1], [71.6, 40.1], [71.7, 42.5], [70.5, 42.9], [69.0, 42.2], [66.8, 42.1], [67.7, 44.7], [69.7, 45.1], [71.1, 45.5], [71.5, 46.6], [72.1, 46.8], [72.3, 48.4], [71.6, 49.6], [71.6, 50.2], [71.4, 50.2], [71.5, 50.8]],
+                  [[78.9, 63.3], [78.3, 64.4], [77.6, 64.5], [77.8, 65.6], [77.0, 65.2], [77.1, 66.2], [75.7, 66.4], [76.2, 67.1], [76.2, 67.7], [73.8, 68.0], [74.8, 68.6], [74.0, 69.3], [72.8, 69.3], [73.2, 70.1], [74.6, 70.2], [73.6, 71.3], [73.0, 72.2], [72.0, 73.3], [73.2, 73.0], [73.6, 73.7], [73.2, 74.2], [72.6, 75.5], [74.6, 75.2], [76.1, 75.8], [78.1, 75.0], [80.1, 74.8], [81.3, 72.8], [81.6, 73.2], [82.4, 72.5], [83.2, 71.9], [83.6, 70.5], [83.3, 69.8], [83.3, 68.5], [83.8, 67.6], [82.9, 68.5], [82.4, 68.7], [81.9, 69.4], [81.1, 69.2], [81.6, 68.5], [80.1, 69.0], [79.6, 68.7], [78.9, 68.8], [79.5, 67.8], [79.8, 66.9], [78.6, 67.4], [79.1, 66.5], [78.8, 66.1], [79.1, 65.6], [78.8, 64.9], [79.1, 64.1], [79.4, 63.3]]
+                ]
+              },
+              {
+                name: '로존디아',
+                desc: '', href: '/31',
+                border: [[37.9, 26.1], [39.2, 27.9], [41.5, 30.4], [42.5, 29.8], [43.2, 32.2], [43.8, 32.6], [43.3, 35.0], [43.8, 36.3], [44.9, 36.0], [46.2, 35.8], [49.4, 33.2], [49.4, 32.0], [50.1, 31.0], [51.2, 31.0], [52.2, 29.8], [53.2, 30.6], [53.4, 31.6], [54.3, 31.2], [55.0, 31.2], [55.3, 32.8], [56.2, 36.0], [57.1, 33.2], [58.9, 32.4], [60.3, 31.6], [60.5, 29.3], [61.3, 29.3], [61.8, 27.0], [60.9, 26.1], [60.5, 24.7], [58.4, 23.7], [57.9, 21.8], [57.2, 20.4], [54.6, 19.6], [52.8, 18.3], [51.8, 15.7], [50.8, 16.1], [50.4, 12.9], [48.1, 9.6], [46.6, 8.0], [44.1, 8.0], [41.1, 8.6], [39.0, 8.8], [38.3, 9.8], [37.0, 10.9], [36.3, 12.5], [35.6, 17.0], [36.6, 21.4]]
+              },
+              {
+                name: '세르무즈',
+                desc: '', href: '/30',
+                border: [[66.9, 42.8], [67.7, 44.8], [70.8, 45.4], [71.2, 46.3], [72.1, 47.0], [71.5, 48.9], [71.1, 48.8], [70.3, 50.2], [70.1, 49.3], [69.7, 48.8], [68.8, 50.0], [68.7, 50.4], [67.9, 50.3], [67.6, 49.3], [67.1, 49.4], [67.1, 51.2], [66.6, 52.0], [66.9, 53.6], [66.3, 53.7], [66.2, 54.1], [65.6, 52.7], [65.4, 53.8], [65.8, 54.6], [64.9, 54.7], [64.6, 55.5], [63.5, 55.5], [63.4, 56.2], [63.1, 56.1], [62.9, 57.0], [62.5, 56.9], [62.9, 58.7], [62.1, 58.8], [61.9, 60.0], [61.3, 59.8], [61.6, 61.4], [61.4, 63.0], [61.0, 63.5], [61.2, 64.6], [60.8, 64.5], [61.0, 65.5], [60.5, 65.8], [60.2, 67.4], [59.9, 66.3], [60.3, 64.7], [60.5, 62.8], [60.0, 63.1], [59.9, 64.2], [59.4, 64.7], [59.8, 62.8], [59.7, 62.1], [59.9, 61.1], [59.4, 60.6], [58.8, 60.5], [58.6, 59.5], [58.2, 60.2], [57.9, 59.9], [58.0, 59.2], [57.5, 58.3], [57.3, 59.1], [56.8, 59.3], [56.6, 59.8], [56.2, 60.1], [55.6, 61.1], [55.7, 62.4], [55.0, 62.1], [54.2, 62.7], [53.2, 62.0], [53.0, 62.8], [52.3, 61.8], [51.9, 61.5], [51.6, 60.6], [51.0, 61.4], [50.8, 60.0], [50.4, 56.6], [51.9, 54.8], [51.9, 53.8], [51.0, 53.6], [50.4, 52.4], [50.4, 51.7], [49.8, 50.6], [50.0, 49.5], [49.1, 48.8], [47.7, 48.5], [48.4, 47.5], [48.6, 48.1], [49.9, 47.5], [50.5, 48.0], [51.1, 46.8], [51.6, 47.6], [53.6, 46.7], [54.6, 46.7], [54.7, 45.9], [55.5, 44.8], [56.2, 44.5], [56.3, 45.7], [56.8, 46.5], [57.5, 46.4], [58.9, 47.5], [60.0, 47.0], [60.5, 46.7], [61.0, 46.2], [61.8, 46.5], [62.0, 45.0], [61.8, 43.8], [61.6, 42.3], [62.6, 42.1], [63.4, 43.2], [65.1, 43.1], [66.4, 42.3]]
+              },
+              {
+                name: '차크라타난',
+                desc: '', href: '/114',
+                border: [[74.8, 75.5], [76.5, 75.9], [78.4, 74.6], [80.1, 74.8], [81.3, 73.0], [81.9, 73.4], [82.9, 72.4], [83.6, 71.1], [83.7, 70.0], [84.0, 68.6], [85.0, 69.5], [86.2, 69.3], [86.8, 68.1], [87.1, 69.3], [87.5, 69.8], [86.8, 70.4], [87.0, 71.4], [86.3, 70.8], [86.6, 72.8], [86.0, 73.9], [85.3, 73.8], [84.3, 74.0], [83.7, 75.8], [82.9, 78.1], [82.9, 76.8], [82.4, 77.5], [81.6, 79.4], [81.3, 79.0], [80.8, 80.1], [80.3, 81.4], [78.3, 81.6], [76.5, 82.0], [75.7, 81.0], [74.2, 80.5], [74.4, 79.3], [74.8, 78.5], [75.2, 77.7], [75.0, 76.6], [74.6, 77.5], [74.3, 76.6], [73.8, 77.5], [72.9, 78.1], [73.7, 76.6], [74.0, 75.9]]
+              },
+              {
+                name: '캄란',
+                desc: '', href: '/68',
+                border: []
+              },
+              {
+                name: '스조렌',
+                desc: '', href: '/74',
+                border: [[37.8, 26.6], [37.1, 31.1], [37.5, 37.6], [38.8, 42.0], [43.6, 48.7], [45.5, 53.4], [47.0, 58.3], [47.4, 60.5], [46.9, 62.3], [48.6, 65.2], [49.2, 63.8], [49.6, 63.7], [50.1, 63.1], [50.0, 61.7], [49.7, 61.1], [50.1, 60.2], [50.8, 59.3], [50.4, 56.4], [51.9, 54.7], [51.9, 53.5], [51.1, 53.8], [50.3, 52.5], [50.2, 51.7], [49.7, 50.5], [49.9, 49.5], [48.9, 48.6], [47.6, 48.5], [48.6, 47.4], [49.0, 48.0], [50.1, 47.4], [50.3, 48.0], [50.9, 46.8], [51.8, 47.4], [53.9, 46.8], [54.8, 46.4], [54.2, 46.0], [54.3, 44.7], [54.6, 43.9], [53.5, 44.3], [52.4, 42.6], [51.1, 40.9], [49.5, 41.2], [48.6, 40.4], [47.8, 41.1], [47.0, 40.2], [46.3, 39.7], [44.7, 39.9], [44.3, 38.5], [45.1, 37.5], [45.4, 36.7], [46.1, 36.6], [45.8, 36.1], [44.4, 36.3], [43.7, 36.6], [43.1, 35.1], [43.6, 32.9], [43.0, 32.3], [42.4, 30.1], [41.4, 30.5], [40.1, 29.3]]
+              },
+              {
+                name: '실',
+                desc: '', href: '/71',
+                border: [[54.9, 38.8], [55.8, 38.3], [56.1, 36.4], [55.9, 35.8], [55.8, 34.3], [55.3, 33.5], [55.3, 31.4], [54.7, 31.2], [54.5, 30.4], [53.6, 31.6], [53.1, 31.0], [52.5, 30.5], [52.0, 29.6], [51.4, 31.2], [50.5, 31.2], [49.7, 31.5], [49.5, 32.7], [49.4, 33.5], [49.3, 34.0], [49.5, 34.8], [49.8, 35.3], [49.5, 36.0], [50.1, 36.4], [50.7, 36.0], [51.3, 35.0], [51.3, 34.5], [52.1, 34.2], [52.9, 34.1], [52.9, 34.6], [53.5, 34.9], [54.1, 34.8], [54.8, 35.4], [54.8, 36.1], [55.2, 36.2], [54.9, 37.3], [54.6, 38.5], [54.3, 39.6]]
+              },
+              {
+                name: '오브니',
+                desc: '', href: '/73',
+                border: [[46.4, 37.0], [45.5, 36.9], [45.4, 37.6], [44.6, 38.7], [44.7, 39.6], [46.4, 39.4], [47.4, 40.1], [47.7, 40.7], [48.5, 40.0], [49.8, 41.1], [51.3, 40.6], [52.7, 42.5], [54.0, 43.9], [54.8, 43.3], [54.7, 41.0], [54.2, 39.8], [54.3, 38.8], [54.7, 37.9], [54.6, 37.0], [55.1, 36.5], [54.7, 35.7], [54.6, 35.1], [53.9, 34.6], [53.0, 35.0], [52.6, 34.6], [52.6, 34.0], [51.3, 34.3], [51.0, 35.6], [50.2, 36.6], [49.6, 36.4], [49.4, 35.8], [49.6, 35.2], [49.6, 34.5], [49.2, 33.9], [49.1, 33.5], [46.1, 35.9]]
+              },
+              {
+                name: '님블',
+                desc: '', href: '/72',
+                border: [[60.0, 32.1], [60.8, 33.1], [62.0, 33.5], [62.8, 33.1], [63.0, 32.6], [62.7, 31.4], [62.4, 30.1], [61.3, 29.6], [60.7, 29.4], [60.4, 30.8]]
+              },
+              {
+                name: '낫소',
+                desc: '', href: '/70',
+                border: [[55.9, 44.4], [56.5, 46.3], [57.5, 46.8], [58.0, 47.6], [59.6, 47.2], [60.2, 46.9], [60.8, 46.1], [61.9, 46.0], [62.0, 44.4], [61.6, 43.7], [61.6, 42.3], [62.8, 41.8], [63.7, 43.3], [65.3, 42.7], [66.8, 42.1], [68.6, 42.1], [70.8, 43.0], [71.6, 42.7], [71.6, 39.8], [72.1, 39.2], [71.9, 37.8], [70.3, 36.6], [69.1, 34.7], [68.4, 33.5], [68.8, 33.0], [67.7, 31.3], [66.8, 30.5], [65.7, 29.2], [65.0, 29.5], [64.5, 30.5], [64.1, 31.0], [63.4, 31.0], [63.1, 31.1], [63.1, 32.3], [62.5, 33.1], [61.6, 33.5], [60.6, 32.8], [59.9, 32.0], [59.2, 32.2], [57.5, 32.8], [56.8, 33.4], [56.3, 35.4], [56.0, 37.8], [55.4, 38.9], [54.8, 39.3], [54.6, 40.2], [54.9, 41.9], [54.9, 43.0], [54.3, 45.0], [54.5, 46.3], [55.1, 45.5]]
+              },
+              {
+                name: '신성령 달크로이츠',
+                desc: '', href: '/123',
+                border: [[62.3, 26.6], [63.5, 26.2], [63.9, 26.1], [64.6, 24.7], [65.6, 23.8], [65.7, 23.3], [65.1, 22.1], [65.6, 21.5], [65.0, 21.0], [64.8, 18.9], [64.4, 18.3], [64.5, 18.1], [64.2, 17.7], [65.0, 17.5], [65.3, 17.8], [66.0, 17.2], [66.3, 17.3], [66.9, 15.6], [65.1, 13.7], [63.7, 12.0], [62.1, 11.1], [59.3, 10.0], [56.7, 9.3], [53.9, 9.0], [51.1, 9.4], [48.8, 10.1], [50.4, 12.4], [50.7, 13.6], [50.7, 15.3], [51.5, 15.6], [52.6, 17.5], [53.3, 18.4], [53.6, 18.4], [53.8, 18.7], [54.1, 18.7], [54.2, 19.1], [56.0, 19.7], [56.9, 20.5], [57.7, 21.6], [57.8, 22.2], [59.0, 24.2], [59.9, 24.3], [60.7, 24.7], [61.6, 26.7]]
+              },
+              {
+                name: '노른슨',
+                desc: '', href: '/124',
+                border: [[63.6, 30.7], [63.8, 31.2], [64.9, 30.2], [65.2, 28.9], [66.2, 29.5], [66.5, 29.9], [66.9, 30.9], [68.8, 32.3], [68.6, 33.8], [70.1, 36.1], [71.5, 36.5], [72.7, 36.7], [73.4, 37.8], [75.1, 36.2], [74.7, 33.9], [74.8, 32.6], [75.3, 32.0], [75.7, 30.8], [75.1, 29.8], [74.6, 28.6], [75.1, 27.3], [75.1, 25.8], [75.3, 24.9], [75.4, 23.7], [73.0, 22.6], [71.6, 20.5], [69.6, 18.1], [67.2, 15.8], [66.5, 17.6], [66.0, 17.4], [65.6, 17.8], [65.0, 17.9], [64.4, 18.0], [65.0, 18.9], [65.1, 21.0], [65.8, 21.6], [65.4, 22.3], [65.9, 23.5], [64.8, 24.9], [64.4, 25.7], [63.6, 26.7], [62.6, 27.0], [61.9, 27.3], [61.9, 28.1], [61.3, 29.5], [61.9, 29.9], [62.3, 30.2], [62.8, 31.3]]
+              },
+              {
+                name: '노르마크',
+                desc: '', href: '/125',
+                border: [[76.1, 24.6], [77.4, 24.1], [77.5, 21.6], [81.1, 21.1], [81.5, 23.9], [82.6, 25.0], [83.2, 24.2], [83.7, 25.0], [84.4, 24.9], [84.9, 25.8], [85.8, 25.0], [88.0, 25.0], [89.5, 26.9], [90.2, 27.3], [90.1, 8.6], [59.7, 8.7], [59.5, 9.7], [62.2, 10.9], [64.2, 12.0], [65.6, 14.2], [67.1, 15.2], [69.5, 17.6], [71.4, 20.0], [72.9, 22.2], [75.3, 23.4]]
+              }
+            ]
+          },
+          '499': {
+            label: '499년',
+            img: 'https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/img/ArundMap_499_high.jpg',
+            pins: [
+              {
+                name: '이스나미르',
+                desc: '', href: '/29',
+                border: [
+                  [[70.7, 51.7], [71.5, 52.3], [70.3, 52.8], [70.4, 53.4], [68.7, 53.8], [69.7, 54.6], [69.8, 55.6], [70.0, 56.2], [70.5, 55.5], [71.4, 55.5], [71.1, 56.3], [71.6, 56.2], [71.8, 56.6], [72.1, 55.5], [72.6, 55.5], [72.5, 54.3], [73.5, 54.3], [73.6, 53.5], [74.2, 53.0], [74.5, 52.1], [75.2, 52.7], [74.7, 53.5], [74.3, 53.8], [74.5, 54.6], [74.0, 54.6], [74.2, 55.1], [73.4, 55.1], [74.0, 56.0], [73.2, 56.4], [73.2, 57.2], [72.1, 57.4], [72.9, 58.2], [72.6, 58.8], [72.6, 59.2], [72.2, 59.4], [71.7, 61.2], [72.8, 60.7], [73.4, 61.1], [73.2, 62.1], [73.5, 63.1], [72.4, 64.7], [73.3, 64.2], [74.2, 63.3], [74.5, 64.1], [75.0, 62.9], [75.4, 63.4], [75.9, 63.0], [75.7, 61.9], [76.5, 62.0], [76.8, 61.6], [77.6, 60.7], [77.5, 61.8], [77.1, 63.1], [77.9, 62.2], [78.2, 62.5], [78.6, 61.6], [79.0, 61.2], [79.2, 60.3], [79.7, 60.8], [80.7, 60.5], [81.2, 61.3], [81.7, 61.4], [81.2, 60.1], [80.7, 58.9], [81.4, 58.5], [82.0, 58.0], [82.5, 57.5], [82.8, 58.0], [83.5, 57.7], [84.3, 58.1], [84.4, 58.7], [84.6, 59.3], [84.2, 59.5], [84.9, 59.7], [84.7, 58.5], [85.2, 58.1], [84.9, 57.1], [85.6, 56.7], [85.6, 55.2], [86.5, 53.3], [86.6, 50.1], [87.0, 48.0], [85.9, 44.5], [84.8, 43.5], [84.5, 42.7], [83.8, 42.5], [83.0, 40.8], [82.2, 41.4], [81.5, 41.1], [82.7, 39.8], [83.3, 38.6], [82.9, 38.1], [83.3, 37.2], [83.0, 36.0], [82.9, 34.7], [83.5, 36.3], [83.7, 37.1], [84.1, 36.1], [84.9, 33.6], [85.7, 33.8], [86.3, 33.0], [87.0, 33.8], [87.6, 33.2], [88.3, 33.2], [88.4, 32.4], [88.8, 32.4], [88.9, 31.3], [89.3, 30.8], [90.1, 29.8], [90.1, 27.5], [89.9, 8.1], [51.2, 8.1], [48.0, 9.5], [50.5, 12.9], [50.8, 15.7], [51.7, 15.8], [53.2, 18.8], [53.9, 18.8], [54.5, 19.6], [54.4, 21.2], [55.9, 21.7], [56.4, 24.8], [57.5, 25.7], [58.6, 24.6], [59.0, 25.1], [59.6, 28.5], [60.7, 31.4], [62.0, 31.8], [63.0, 32.1], [64.6, 30.7], [65.7, 31.0], [67.0, 29.8], [68.3, 30.7], [69.6, 31.3], [70.4, 32.3], [70.1, 34.0], [68.7, 34.3], [67.7, 35.4], [68.0, 38.1], [67.6, 39.7], [67.4, 41.3], [68.6, 44.4], [69.6, 44.6], [71.1, 45.5], [71.5, 46.6], [72.1, 46.8], [72.3, 48.4], [71.6, 49.6], [71.6, 50.2], [71.4, 50.2], [71.5, 50.8]],
+                  [[78.9, 63.3], [78.3, 64.4], [77.6, 64.5], [77.8, 65.6], [77.0, 65.2], [77.1, 66.2], [75.7, 66.4], [76.2, 67.1], [76.2, 67.7], [73.8, 68.0], [74.8, 68.6], [74.0, 69.3], [72.8, 69.3], [73.2, 70.1], [74.6, 70.2], [73.6, 71.3], [73.0, 72.2], [72.0, 73.3], [73.2, 73.0], [73.6, 73.7], [73.2, 74.2], [72.6, 75.5], [74.6, 75.2], [76.1, 75.8], [78.1, 75.0], [80.1, 74.8], [81.3, 72.8], [81.6, 73.2], [82.4, 72.5], [83.2, 71.9], [83.6, 70.5], [83.3, 69.8], [83.3, 68.5], [83.8, 67.6], [82.9, 68.5], [82.4, 68.7], [81.9, 69.4], [81.1, 69.2], [81.6, 68.5], [80.1, 69.0], [79.6, 68.7], [78.9, 68.8], [79.5, 67.8], [79.8, 66.9], [78.6, 67.4], [79.1, 66.5], [78.8, 66.1], [79.1, 65.6], [78.8, 64.9], [79.1, 64.1], [79.4, 63.3]]
+                ]
+              },
+              {
+                name: '로존디아',
+                desc: '', href: '/31',
+                border: [[36.3, 23.9], [36.3, 26.3], [36.2, 28.9], [36.5, 35.1], [38.8, 41.6], [41.2, 43.7], [42.6, 43.2], [44.0, 41.7], [45.5, 39.1], [46.9, 37.5], [47.5, 36.2], [48.3, 35.7], [49.6, 36.7], [50.4, 37.0], [51.6, 37.2], [52.4, 37.2], [53.1, 35.8], [53.5, 35.2], [53.7, 34.7], [54.8, 34.2], [55.9, 33.3], [57.1, 32.2], [58.5, 31.6], [59.8, 31.0], [60.7, 31.2], [60.1, 29.9], [59.7, 28.2], [58.6, 24.6], [57.5, 25.7], [56.5, 25.0], [55.9, 21.6], [54.5, 21.1], [54.6, 19.6], [52.8, 18.3], [51.8, 15.7], [50.8, 16.1], [50.4, 12.9], [48.1, 9.6], [46.6, 8.0], [44.1, 8.0], [41.1, 8.6], [39.0, 8.8], [38.3, 9.8], [37.0, 10.9], [36.3, 12.5], [35.6, 17.0], [36.2, 21.6]]
+              },
+              {
+                name: '세르무즈',
+                desc: '', href: '/30',
+                border: [[67.3, 41.1], [68.2, 43.8], [70.8, 45.4], [71.2, 46.3], [72.1, 47.0], [71.5, 48.9], [71.1, 48.8], [70.3, 50.2], [70.1, 49.3], [69.7, 48.8], [68.8, 50.0], [68.7, 50.4], [67.9, 50.3], [67.6, 49.3], [67.1, 49.4], [67.1, 51.2], [66.6, 52.0], [66.9, 53.6], [66.3, 53.7], [66.2, 54.1], [65.6, 52.7], [65.4, 53.8], [65.8, 54.6], [64.9, 54.7], [64.6, 55.5], [63.5, 55.5], [63.4, 56.2], [63.1, 56.1], [62.9, 57.0], [62.5, 56.9], [62.9, 58.7], [62.1, 58.8], [61.9, 60.0], [61.3, 59.8], [61.6, 61.4], [61.4, 63.0], [61.0, 63.5], [61.2, 64.6], [60.8, 64.5], [61.0, 65.5], [60.5, 65.8], [60.2, 67.4], [59.9, 66.3], [60.3, 64.7], [60.5, 62.8], [60.0, 63.1], [59.9, 64.2], [59.4, 64.7], [59.8, 62.8], [59.7, 62.1], [59.9, 61.1], [59.4, 60.6], [58.8, 60.5], [58.6, 59.5], [58.2, 60.2], [57.9, 59.9], [58.0, 59.2], [57.5, 58.3], [57.3, 59.1], [56.8, 59.3], [56.6, 59.8], [56.2, 60.1], [55.6, 61.1], [55.7, 62.4], [55.0, 62.1], [54.2, 62.7], [53.2, 62.0], [53.0, 62.8], [52.3, 61.8], [51.9, 61.5], [51.6, 60.6], [51.0, 61.4], [50.8, 60.0], [50.6, 59.2], [50.0, 60.7], [49.4, 61.2], [50.2, 61.9], [50.0, 63.0], [50.5, 63.3], [50.1, 64.0], [49.7, 63.7], [49.5, 64.2], [49.0, 63.8], [49.5, 65.6], [48.9, 66.1], [48.4, 67.2], [48.4, 65.0], [46.9, 63.2], [46.2, 62.0], [46.8, 60.7], [46.3, 59.1], [46.0, 57.7], [46.4, 56.9], [44.8, 57.4], [44.5, 55.4], [44.4, 53.3], [43.7, 52.7], [43.5, 51.8], [43.8, 51.1], [42.9, 50.8], [42.7, 49.2], [42.2, 48.0], [39.9, 46.7], [40.1, 43.1], [41.4, 43.7], [43.0, 42.9], [45.6, 39.3], [47.7, 36.2], [48.3, 35.7], [49.5, 36.6], [50.8, 37.2], [51.7, 37.2], [52.5, 37.2], [53.1, 36.0], [54.1, 34.4], [55.3, 34.0], [56.4, 32.8], [57.9, 31.7], [59.3, 31.3], [60.0, 31.0], [61.5, 31.7], [62.2, 31.8], [63.0, 32.1], [64.6, 30.7], [65.7, 30.9], [67.0, 29.8], [68.5, 30.8], [69.6, 31.4], [70.5, 31.9], [70.2, 34.0], [69.0, 34.1], [68.1, 34.9], [67.5, 35.4], [68.0, 37.2], [67.8, 39.0]]
+              },
+              {
+                name: '차크라타난',
+                desc: '', href: '/114',
+                border: [[74.8, 75.5], [76.5, 75.9], [78.4, 74.6], [80.1, 74.8], [81.3, 73.0], [81.9, 73.4], [82.9, 72.4], [83.6, 71.1], [83.7, 70.0], [84.0, 68.6], [85.0, 69.5], [86.2, 69.3], [86.8, 68.1], [87.1, 69.3], [87.5, 69.8], [86.8, 70.4], [87.0, 71.4], [86.3, 70.8], [86.6, 72.8], [86.0, 73.9], [85.3, 73.8], [84.3, 74.0], [83.7, 75.8], [82.9, 78.1], [82.9, 76.8], [82.4, 77.5], [81.6, 79.4], [81.3, 79.0], [80.8, 80.1], [80.3, 81.4], [78.3, 81.6], [76.5, 82.0], [75.7, 81.0], [74.2, 80.5], [74.4, 79.3], [74.8, 78.5], [75.2, 77.7], [75.0, 76.6], [74.6, 77.5], [74.3, 76.6], [73.8, 77.5], [72.9, 78.1], [73.7, 76.6], [74.0, 75.9]]
+              }
+            ]
+          }
+        };
+        var DEFAULT_ERA = '270';
+        var currentEra = DEFAULT_ERA;
+        function currentPins() { return MAP_ERAS[currentEra].pins; }
+
+        var viewport = mapWrap.querySelector('.nw-map-viewport');
+        var stage = mapWrap.querySelector('.nw-map-stage');
+        var img = mapWrap.querySelector('.nw-map-img');
+        var pinsLayer = mapWrap.querySelector('.nw-map-pins');
+
+        var tooltip = document.createElement('div');
+        tooltip.className = 'nw-map-tooltip';
+        stage.appendChild(tooltip);
+
+        tooltip.addEventListener('mouseenter', function () { clearTimeout(hoverCloseTimer); });
+        tooltip.addEventListener('mouseleave', function () { scheduleHoverClose(); });
+
+        var activePin = null;
+        var isLocked = false;
+        var hoverCloseTimer = null;
+
+        Object.keys(MAP_ERAS).forEach(function (era) {
+          var preload = new Image();
+          preload.src = MAP_ERAS[era].img;
+        });
+        img.src = MAP_ERAS[currentEra].img; /* HTML에 박혀있던 기존 src를 덮어씀 */
+
+        function closeTooltip() {
+          tooltip.classList.remove('visible');
+          if (activePin) activePin.classList.remove('is-active');
+          activePin = null;
+          isLocked = false;
+          setActiveBorder(-1);
+        }
+
+        function scheduleHoverClose() {
+          if (isLocked) return;
+          clearTimeout(hoverCloseTimer);
+          hoverCloseTimer = setTimeout(closeTooltip, 150);
+        }
+
+        function normalizeBorders(border) {
+          if (!border || !border.length) return [];
+          var first = border[0];
+          var isMulti = Array.isArray(first) && Array.isArray(first[0]);
+          return isMulti ? border : [border];
+        }
+
+        /* 국경선(다각형) 꼭짓점들의 중심 좌표를 계산 - x,y가 없는 항목의 말풍선 위치로 사용 */
+        function polygonCenter(border) {
+          var polys = normalizeBorders(border);
+          var sx = 0, sy = 0, n = 0;
+          polys.forEach(function (poly) {
+            poly.forEach(function (p) { sx += p[0]; sy += p[1]; n++; });
+          });
+          if (!n) return { x: 50, y: 50 };
+          return { x: sx / n, y: sy / n };
+        }
+
+        function showTooltip(pin, data, index, posX, posY, lock) {
+          clearTimeout(hoverCloseTimer);
+
+          if (lock && isLocked && activePin === pin && pin) {
+            closeTooltip();
+            return;
+          }
+          mapWrap.querySelectorAll('.nw-map-pin').forEach(function (p) { p.classList.remove('is-active'); });
+          if (pin) pin.classList.add('is-active');
+          setActiveBorder(index);
+          activePin = pin;
+          if (lock) isLocked = true;
+          tooltip.innerHTML =
+            '<p class="nw-map-tooltip-name"><a href="' + data.href + '">' + data.name + '</a></p>' +
+            '<p class="nw-map-tooltip-desc">' + data.desc + '</p>';
+          /*<a class="nw-map-tooltip-link" href="' + data.href + '">문서 보기</a>'; */
+          tooltip.style.left = posX + '%';
+          tooltip.style.top = posY + '%';
+          tooltip.style.transform = 'translate(-50%, calc(-100% - 14px)) scale(' + (1 / scale) + ')';
+          tooltip.style.transformOrigin = 'bottom center';
+          tooltip.classList.add('visible');
+        }
+
+        function renderPins() {
+          pinsLayer.innerHTML = '';
+          currentPins().forEach(function (data, index) {
+            data._pinEl = null; /* 초기화 */
+            if (data.x == null || data.y == null) return;
+            var pin = document.createElement('div');
+            pin.className = 'nw-map-pin';
+            pin.style.left = data.x + '%';
+            pin.style.top = data.y + '%';
+            pin.title = data.name;
+            pin.addEventListener('click', function (e) {
+              e.stopPropagation();
+              showTooltip(pin, data, index, data.x, data.y, true);
+            });
+            pin.addEventListener('mouseenter', function () {          // ← 추가
+              showTooltip(pin, data, index, data.x, data.y, false);
+            });
+            pin.addEventListener('mouseleave', function () {           // ← 추가
+              scheduleHoverClose();
+            });
+            pinsLayer.appendChild(pin);
+            data._pinEl = pin; /* 나중에 renderBorders에서 인덱스 대신 직접 참조하기 위함 */
+          });
+        }
+
+        var svgNS = 'http://www.w3.org/2000/svg';
+        var svg = mapWrap.querySelector('.nw-map-svg');
+
+        if (!svg) {
+          svg = document.createElementNS(svgNS, 'svg');
+          svg.setAttribute('class', 'nw-map-svg');
+          svg.setAttribute('viewBox', '0 0 100 100');
+          svg.setAttribute('preserveAspectRatio', 'none');
+          stage.appendChild(svg);   // .nw-map-stage 안, .nw-map-img 다음 위치에 삽입됨
+        }
+
+        function renderBorders() {
+          svg.innerHTML = '';
+          currentPins().forEach(function (data, i) {
+            var polys = normalizeBorders(data.border);
+            if (!polys.length) return;
+
+            var hasOwnPin = data.x != null && data.y != null;
+            var center = hasOwnPin ? { x: data.x, y: data.y } : polygonCenter(data.border);
+
+            polys.forEach(function (points) {          // ← 다각형마다 하나씩 <polygon> 생성
+              var pointsStr = points.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
+              var poly = document.createElementNS(svgNS, 'polygon');
+              poly.setAttribute('points', pointsStr);
+              poly.setAttribute('class', 'nw-map-border');
+              poly.dataset.pinIndex = i;              // ← 같은 나라면 같은 인덱스 → 같이 하이라이트/토글됨
+
+              poly.style.pointerEvents = 'all';
+              poly.style.cursor = 'pointer';
+
+              poly.addEventListener('click', function (e) {
+                e.stopPropagation();
+                showTooltip(data._pinEl, data, i, center.x, center.y, true);
+              });
+              poly.addEventListener('mouseenter', function () {
+                showTooltip(data._pinEl, data, i, center.x, center.y, false);
+              });
+              poly.addEventListener('mouseleave', function () {
+                scheduleHoverClose();
+              });
+
+              svg.appendChild(poly);
+            });
+          });
+        }
+
+        function setActiveBorder(index) {
+          svg.querySelectorAll('.nw-map-border').forEach(function (p) {
+            p.classList.toggle('is-active', p.dataset.pinIndex === String(index));
+          });
+        }
+
+        if (img.complete) { renderPins(); renderBorders(); }
+        else img.addEventListener('load', function () { renderPins(); renderBorders(); });
+
+        /* ============ 확대/축소 + 드래그 이동 ============ */
+        var scale = 1, tx = 0, ty = 0;
+        var debugDotsLayer = null;
+        var MIN_SCALE = 1, MAX_SCALE = 4;
+
+        function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+        function applyTransform() {
+          var vw = viewport.clientWidth, vh = viewport.clientHeight;
+          var maxTx = 0, minTx = vw - vw * scale;
+          var maxTy = 0, minTy = vh - vh * scale;
+          tx = clamp(tx, minTx, maxTx);
+          ty = clamp(ty, minTy, maxTy);
+          stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+          if (tooltip.classList.contains('visible')) {
+            tooltip.style.transform = 'translate(-50%, calc(-100% - 14px)) scale(' + (1 / scale) + ')';
+          }
+          if (debugDotsLayer) {
+            debugDotsLayer.style.setProperty('--nw-dot-inv-scale', (1 / scale).toFixed(4));
+          }
+        }
+
+        function zoomAt(cx, cy, newScale) {
+          newScale = clamp(newScale, MIN_SCALE, MAX_SCALE);
+          var ratio = newScale / scale;
+          tx = cx - (cx - tx) * ratio;
+          ty = cy - (cy - ty) * ratio;
+          scale = newScale;
+          applyTransform();
+        }
+
+        var refreshDebug = null;
+
+        var MORPH_DURATION = 950;
+        var isMorphing = false;
+
+        /* 다각형을 둘레 길이 기준으로 n개의 점으로 다시 뽑아냄 (모핑을 위한 점 개수 통일) */
+        function resamplePolygon(points, n) {
+          if (points.length < 2) return points.slice();
+          var segLens = [], perim = 0;
+          for (var i = 0; i < points.length; i++) {
+            var a = points[i], b = points[(i + 1) % points.length];
+            var d = Math.hypot(b[0] - a[0], b[1] - a[1]);
+            segLens.push(d);
+            perim += d;
+          }
+          if (!perim) return points.slice();
+          var result = [], step = perim / n, distAcc = 0, segIdx = 0;
+          for (var k = 0; k < n; k++) {
+            var target = k * step;
+            while (segIdx < segLens.length - 1 && distAcc + segLens[segIdx] < target) {
+              distAcc += segLens[segIdx];
+              segIdx++;
+            }
+            var a2 = points[segIdx], b2 = points[(segIdx + 1) % points.length];
+            var segLen = segLens[segIdx] || 0.0001;
+            var t = Math.max(0, Math.min(1, (target - distAcc) / segLen));
+            result.push([a2[0] + (b2[0] - a2[0]) * t, a2[1] + (b2[1] - a2[1]) * t]);
+          }
+          return result;
+        }
+
+        /* fromEra → toEra로 국경선을 모핑/페이드시키는 애니메이션.
+           완료되면 resolve되는 Promise를 반환합니다. */
+        function animateBorderMorph(fromEra, toEra, morphSvg) {
+          var fromPins = MAP_ERAS[fromEra].pins;
+          var toPins = MAP_ERAS[toEra].pins;
+          var fromMap = {}, toMap = {};
+          fromPins.forEach(function (p) { fromMap[p.name] = p; });
+          toPins.forEach(function (p) { toMap[p.name] = p; });
+
+          var names = Object.keys(fromMap);
+          Object.keys(toMap).forEach(function (n) { if (names.indexOf(n) === -1) names.push(n); });
+
+          var N = 60;
+          var jobs = [];
+
+          names.forEach(function (name) {
+            var fromPolys = fromMap[name] ? normalizeBorders(fromMap[name].border) : [];
+            var toPolys = toMap[name] ? normalizeBorders(toMap[name].border) : [];
+            var maxLen = Math.max(fromPolys.length, toPolys.length);
+
+            for (var i = 0; i < maxLen; i++) {
+              var fp = fromPolys[i], tp = toPolys[i];
+              var poly = document.createElementNS(svgNS, 'polygon');
+              poly.setAttribute('class', 'nw-map-morph-poly');
+              poly.style.fill = 'var(--nw-accent)';
+              poly.style.stroke = 'var(--nw-accent)';
+              poly.setAttribute('stroke-width', '0.3');
+              poly.setAttribute('vector-effect', 'non-scaling-stroke');
+
+              if (fp && tp) {
+                var fromR = resamplePolygon(fp, N), toR = resamplePolygon(tp, N);
+                poly.style.fillOpacity = '0.14';
+                poly.style.strokeOpacity = '0.85';
+                morphSvg.appendChild(poly);
+                jobs.push({ el: poly, from: fromR, to: toR, opFrom: 1, opTo: 1 });
+              } else if (fp && !tp) {
+                poly.setAttribute('points', fp.map(function (p) { return p[0] + ',' + p[1]; }).join(' '));
+                poly.style.fillOpacity = '0.14';
+                poly.style.strokeOpacity = '0.85';
+                morphSvg.appendChild(poly);
+                jobs.push({ el: poly, from: null, to: null, opFrom: 1, opTo: 0 });
+              } else if (!fp && tp) {
+                poly.setAttribute('points', tp.map(function (p) { return p[0] + ',' + p[1]; }).join(' '));
+                poly.style.fillOpacity = '0.14';
+                poly.style.strokeOpacity = '0.85';
+                morphSvg.appendChild(poly);
+                jobs.push({ el: poly, from: null, to: null, opFrom: 0, opTo: 1 });
+              }
+            }
+          });
+
+          return new Promise(function (resolve) {
+            var start = null;
+            function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+            function frame(ts) {
+              if (!start) start = ts;
+              var t = Math.min(1, (ts - start) / MORPH_DURATION);
+              var e = ease(t);
+              jobs.forEach(function (job) {
+                if (job.from && job.to) {
+                  var pts = job.from.map(function (p, i) {
+                    var q = job.to[i];
+                    return (p[0] + (q[0] - p[0]) * e) + ',' + (p[1] + (q[1] - p[1]) * e);
+                  }).join(' ');
+                  job.el.setAttribute('points', pts);
+                }
+                job.el.style.opacity = job.opFrom + (job.opTo - job.opFrom) * e;
+              });
+              if (t < 1) requestAnimationFrame(frame);
+              else resolve();
+            }
+            requestAnimationFrame(frame);
+          });
+        }
+        
+        function switchEra(era) {
+          if (!MAP_ERAS[era] || era === currentEra || isMorphing) return;
+          isMorphing = true;
+          var fromEra = currentEra;
+          closeTooltip();
+          mapWrap.classList.add('is-morphing');
+          mapWrap.querySelectorAll('.nw-map-tab').forEach(function (btn) {
+            btn.classList.toggle('active', btn.dataset.era === era);
+            btn.disabled = true;
+          });
+
+          /* 지도 이미지 크로스페이드용 임시 레이어 */
+          var imgNext = document.createElement('img');
+          imgNext.className = 'nw-map-img nw-map-img-next';
+          imgNext.src = MAP_ERAS[era].img;
+          img.insertAdjacentElement('afterend', imgNext);
+
+          /* 국경선 모핑용 임시 SVG 레이어 (기존 상호작용 svg는 잠시 숨김) */
+          var morphSvg = document.createElementNS(svgNS, 'svg');
+          morphSvg.setAttribute('viewBox', '0 0 100 100');
+          morphSvg.setAttribute('preserveAspectRatio', 'none');
+          morphSvg.setAttribute('class', 'nw-map-svg nw-map-morph-svg');
+          stage.appendChild(morphSvg);
+
+          svg.style.opacity = '0';
+          pinsLayer.style.opacity = '0';
+
+          function startFade() {
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () {
+                imgNext.style.opacity = '1';
+                img.style.transition = 'opacity 950ms ease';
+                img.style.opacity = '0.3';
+              });
+            });
+          }
+          if (imgNext.complete) startFade(); else imgNext.onload = startFade;
+
+          animateBorderMorph(fromEra, era, morphSvg).then(function () {
+            currentEra = era;
+            img.src = MAP_ERAS[era].img;
+            img.style.transition = '';
+            img.style.opacity = '1';
+            imgNext.remove();
+            morphSvg.remove();
+
+            renderPins();
+            renderBorders();
+            svg.style.opacity = '1';
+            pinsLayer.style.opacity = '1';
+
+            mapWrap.classList.remove('is-morphing');
+            mapWrap.querySelectorAll('.nw-map-tab').forEach(function (btn) { btn.disabled = false; });
+            isMorphing = false;
+
+            /* scale = 1; tx = 0; ty = 0;
+            applyTransform(); */
+
+            if (refreshDebug) refreshDebug();
+            var eraLabelEl = document.getElementById('nw-map-debug-era-label');
+            if (eraLabelEl) eraLabelEl.textContent = '지도 좌표 에디터 (' + MAP_ERAS[era].label + ')';
+          });
+        }
+
+        mapWrap.querySelectorAll('.nw-map-tab').forEach(function (btn) {
+          btn.addEventListener('click', function () { switchEra(btn.dataset.era); });
+        });
+
+        mapWrap.querySelectorAll('.nw-map-zoom-btn').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var cx = viewport.clientWidth / 2, cy = viewport.clientHeight / 2;
+            var type = btn.dataset.zoom;
+            if (type === 'in') zoomAt(cx, cy, scale * 1.4);
+            else if (type === 'out') zoomAt(cx, cy, scale / 1.4);
+            else { scale = 1; tx = 0; ty = 0; applyTransform(); closeTooltip(); }
+          });
+        });
+
+        /* 마우스 휠 줌 */
+        viewport.addEventListener('wheel', function (e) {
+          e.preventDefault();
+          closeTooltip();
+          var rect = viewport.getBoundingClientRect();
+          var cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+          zoomAt(cx, cy, scale * (e.deltaY < 0 ? 1.12 : 1 / 1.12));
+        }, { passive: false });
+
+        /* 드래그 이동 (마우스) */
+        var dragging = false, lastX = 0, lastY = 0, dragMoved = false;
+        viewport.addEventListener('mousedown', function (e) {
+          dragging = true;
+          dragMoved = false;
+          lastX = e.clientX;
+          lastY = e.clientY;
+          viewport.classList.add('is-dragging');
+        });
+        window.addEventListener('mousemove', function (e) {
+          if (!dragging) return;
+          var dx = e.clientX - lastX, dy = e.clientY - lastY;
+          if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved = true;
+          tx += dx; ty += dy;
+          lastX = e.clientX; lastY = e.clientY;
+          applyTransform();
+        });
+        window.addEventListener('mouseup', function () {
+          dragging = false;
+          viewport.classList.remove('is-dragging');
+        });
+
+        viewport.addEventListener('click', function (e) {
+          if (dragMoved) return; // 지도를 드래그한 직후엔 무시
+          closeTooltip();
+        });
+
+        /* 터치: 드래그 + 핀치 줌 */
+        var touchState = null;
+        viewport.addEventListener('touchstart', function (e) {
+          closeTooltip();
+          if (e.touches.length === 1) {
+            touchState = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+          } else if (e.touches.length === 2) {
+            var dx = e.touches[0].clientX - e.touches[1].clientX;
+            var dy = e.touches[0].clientY - e.touches[1].clientY;
+            touchState = { mode: 'pinch', dist: Math.hypot(dx, dy), startScale: scale };
+          }
+        }, { passive: true });
+
+        viewport.addEventListener('touchmove', function (e) {
+          if (!touchState) return;
+          e.preventDefault();
+          if (touchState.mode === 'pan' && e.touches.length === 1) {
+            var dx = e.touches[0].clientX - touchState.x;
+            var dy = e.touches[0].clientY - touchState.y;
+            tx += dx; ty += dy;
+            touchState.x = e.touches[0].clientX;
+            touchState.y = e.touches[0].clientY;
+            applyTransform();
+          } else if (touchState.mode === 'pinch' && e.touches.length === 2) {
+            var ndx = e.touches[0].clientX - e.touches[1].clientX;
+            var ndy = e.touches[0].clientY - e.touches[1].clientY;
+            var newDist = Math.hypot(ndx, ndy);
+            var rect = viewport.getBoundingClientRect();
+            var cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+            var cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+            zoomAt(cx, cy, touchState.startScale * (newDist / touchState.dist));
+          }
+        }, { passive: false });
+
+        viewport.addEventListener('touchend', function () { touchState = null; });
+
+        /* 더블클릭으로 빠른 확대 */
+        viewport.addEventListener('dblclick', function (e) {
+          var rect = viewport.getBoundingClientRect();
+          zoomAt(e.clientX - rect.left, e.clientY - rect.top, scale < MAX_SCALE ? scale * 2 : 1);
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!mapWrap.contains(e.target)) closeTooltip();
+        });
+        tooltip.addEventListener('click', function (e) { e.stopPropagation(); });
+
+        /* ============ 좌표 에디터 모드 (?mapdebug=1) ============
+           - 점을 클릭하면 선택되고(파란색), 선택된 점은 드래그로 옮기거나
+             방향키로 미세조정(Shift=1%, 기본=0.1%) 할 수 있습니다. */
+        if (new URLSearchParams(location.search).get('mapdebug') === '1') {
+          var dbgByEra = {};
+
+          function makeDbgForEra(era) {
+            var d = { mode: 'pin', pins: [], borders: [], current: [], selected: null };
+            MAP_ERAS[era].pins.forEach(function (data) {
+              if (data.x != null && data.y != null) {
+                d.pins.push({ x: data.x, y: data.y, name: data.name });
+              }
+              normalizeBorders(data.border).forEach(function (poly) {
+                d.borders.push({
+                  name: data.name,
+                  points: poly.map(function (pt) { return { x: pt[0], y: pt[1] }; })
+                });
+              });
+            });
+            return d;
+          }
+          function getDbg() {
+            if (!dbgByEra[currentEra]) dbgByEra[currentEra] = makeDbgForEra(currentEra);
+            return dbgByEra[currentEra];
+          }
+
+          var undoStacks = {};
+          function getUndoStack() {
+            if (!undoStacks[currentEra]) undoStacks[currentEra] = [];
+            return undoStacks[currentEra];
+          }
+          function pushUndo(action) {
+            getUndoStack().push(action);
+          }
+
+          function clampPct(v) { return Math.max(0, Math.min(100, v)); }
+
+          function distToSegment(p, a, b) {
+            var dx = b.x - a.x, dy = b.y - a.y;
+            var lenSq = dx * dx + dy * dy;
+            var t = lenSq === 0 ? 0 : ((p.x - a.x) * dx + (p.y - a.y) * dy) / lenSq;
+            t = Math.max(0, Math.min(1, t));
+            var cx = a.x + t * dx, cy = a.y + t * dy;
+            var ddx = p.x - cx, ddy = p.y - cy;
+            return Math.sqrt(ddx * ddx + ddy * ddy);
+          }
+
+          var INSERT_THRESHOLD = 1.0; // % 단위, 필요하면 조절
+          function findInsertTarget(dbg, x, y) {
+            var best = null;
+            var bestDist = INSERT_THRESHOLD;
+            dbg.borders.forEach(function (border) {
+              var pts = border.points;
+              for (var i = 0; i < pts.length; i++) {
+                var a = pts[i];
+                var b = pts[(i + 1) % pts.length]; // 마지막 점→첫 점도 변으로 취급 (폐곡선)
+                var d = distToSegment({ x: x, y: y }, a, b);
+                if (d < bestDist) {
+                  bestDist = d;
+                  best = { border: border, insertIndex: i + 1 };
+                }
+              }
+            });
+            return best;
+          }
+
+          /* ── 스타일 ── */
+          var dbgStyle = document.createElement('style');
+          dbgStyle.textContent =
+            '.nw-map-debug-panel{position:fixed;top:16px;right:16px;width:280px;' +
+            'max-height:80vh;overflow:auto;background:#1c1d1f;color:#eee;' +
+            'border:1px solid #444;border-radius:6px;font:12px/1.5 monospace;z-index:9999;}' +
+            '.nw-map-debug-head{display:flex;align-items:center;justify-content:space-between;' +
+            'padding:10px 12px;border-bottom:1px solid #444;font-weight:700;}' +
+            '.nw-map-debug-hint{padding:8px 12px;border-bottom:1px solid #333;color:#999;font-size:11px;line-height:1.6;}' +
+            '.nw-map-debug-modes{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid #333;}' +
+            '.nw-map-debug-modes button{flex:1;background:#2a2b2e;border:1px solid #444;color:#ccc;' +
+            'border-radius:4px;padding:5px;cursor:pointer;font:inherit;}' +
+            '.nw-map-debug-modes button.active{background:#e89517;color:#1a1b1d;border-color:#e89517;font-weight:700;}' +
+            '.nw-map-debug-list{padding:8px 12px;white-space:pre-wrap;word-break:break-all;color:#9fdc9f;}' +
+            '.nw-map-debug-actions{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;border-top:1px solid #333;}' +
+            '.nw-map-debug-actions button{flex:1;min-width:60px;background:#2a2b2e;border:1px solid #444;' +
+            'color:#eee;border-radius:4px;padding:6px;cursor:pointer;font:inherit;}' +
+            '.nw-map-debug-actions button:hover{border-color:#e89517;color:#e89517;}' +
+            '.nw-map-debug-dot{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;' +
+            'border-radius:50%;background:#ff4d4d;border:1px solid #fff;pointer-events:auto;' +
+            'cursor:grab;z-index:5;transform:scale(var(--nw-dot-inv-scale,1));transform-origin:center;}' +
+            '.nw-map-debug-dot:active{cursor:grabbing;}' +
+            '.nw-map-debug-dot span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);' +
+            'font-size:10px;color:#ff4d4d;font-weight:700;text-shadow:0 0 2px #000;pointer-events:none;white-space:nowrap;}' +
+            '.nw-map-debug-dot.is-finished{background:#ff9f4d;opacity:.85;}' +
+            '.nw-map-debug-dot.is-finished span{color:#ff9f4d;}' +
+            '.nw-map-debug-dot.is-selected{background:#4dafff;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;' +
+            'box-shadow:0 0 0 3px rgba(77,175,255,.4);z-index:6;}' +
+            '.nw-map-debug-dot.is-selected span{color:#4dafff;}';
+          document.head.appendChild(dbgStyle);
+
+          /* ── 패널 ── */
+          var panel = document.createElement('div');
+          panel.className = 'nw-map-debug-panel';
+          panel.innerHTML =
+            '<div class="nw-map-debug-head"><span id="nw-map-debug-era-label">지도 좌표 에디터 (' + MAP_ERAS[currentEra].label + ')</span></div>' +
+            '<div class="nw-map-debug-hint">기존 핀·국경선이 자동으로 불러와져 있어요.<br>점 클릭=선택(파란색) · 드래그로 이동 · 방향키로 미세조정(Shift=1%) · Delete로 삭제<br>국경선 모드에서 기존 선 위를 클릭하면 그 자리에 점이 추가됩니다.</div>' +
+            '<div class="nw-map-debug-modes">' +
+            '<button type="button" data-mode="pin" class="active">핀</button>' +
+            '<button type="button" data-mode="border">국경선</button>' +
+            '</div>' +
+            '<div class="nw-map-debug-list"></div>' +
+            '<div class="nw-map-debug-actions">' +
+            '<button type="button" data-act="undo">되돌리기</button>' +
+            '<button type="button" data-act="finish">새 다각형 완료</button>' +
+            '<button type="button" data-act="clear">전체 초기화</button>' +
+            '<button type="button" data-act="copy">복사</button>' +
+            '</div>';
+          document.body.appendChild(panel);
+          var listEl = panel.querySelector('.nw-map-debug-list');
+
+          var dotsLayer = document.createElement('div');
+          dotsLayer.style.position = 'absolute';
+          dotsLayer.style.inset = '0';
+          dotsLayer.style.pointerEvents = 'none';
+          stage.appendChild(dotsLayer);
+          debugDotsLayer = dotsLayer;
+
+          var dbgSvg = document.createElementNS(svgNS, 'svg');
+          dbgSvg.setAttribute('viewBox', '0 0 100 100');
+          dbgSvg.setAttribute('preserveAspectRatio', 'none');
+          dbgSvg.style.position = 'absolute';
+          dbgSvg.style.inset = '0';
+          dbgSvg.style.width = '100%';
+          dbgSvg.style.height = '100%';
+          dbgSvg.style.pointerEvents = 'none';
+          stage.appendChild(dbgSvg);
+
+          function addDot(p, list, idx, extraClass, labelText) {
+            var dbg = getDbg();
+            var dot = document.createElement('div');
+            dot.className = 'nw-map-debug-dot' + (extraClass ? ' ' + extraClass : '');
+            if (dbg.selected && dbg.selected.list === list && dbg.selected.index === idx) {
+              dot.classList.add('is-selected');
+            }
+            dot.style.left = p.x + '%';
+            dot.style.top = p.y + '%';
+            dot.innerHTML = '<span>' + (labelText != null ? labelText : (idx + 1)) + '</span>';
+
+            function moveTo(clientX, clientY) {
+              var rect = stage.getBoundingClientRect();
+              p.x = clampPct((clientX - rect.left) / rect.width * 100);
+              p.y = clampPct((clientY - rect.top) / rect.height * 100);
+              refresh();
+            }
+
+            dot.addEventListener('mousedown', function (e) {
+              e.stopPropagation();
+              e.preventDefault();
+              getDbg().selected = { list: list, index: idx };
+              refresh();
+              var onMove = function (ev) { moveTo(ev.clientX, ev.clientY); };
+              var onUp = function () {
+                window.removeEventListener('mousemove', onMove);
+                window.removeEventListener('mouseup', onUp);
+              };
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onUp);
+            });
+
+            dot.addEventListener('touchstart', function (e) {
+              e.stopPropagation();
+              getDbg().selected = { list: list, index: idx };
+              refresh();
+              var onMove = function (ev) { moveTo(ev.touches[0].clientX, ev.touches[0].clientY); };
+              var onEnd = function () {
+                window.removeEventListener('touchmove', onMove);
+                window.removeEventListener('touchend', onEnd);
+              };
+              window.addEventListener('touchmove', onMove, { passive: true });
+              window.addEventListener('touchend', onEnd);
+            }, { passive: true });
+
+            dotsLayer.appendChild(dot);
+          }
+
+          function redrawDots() {
+            var dbg = getDbg();
+            dotsLayer.innerHTML = '';
+            dbgSvg.innerHTML = '';
+
+            if (dbg.mode === 'pin') {
+              dbg.pins.forEach(function (p, i) { addDot(p, dbg.pins, i, null, p.name ? p.name : (i + 1)); });
+              return;
+            }
+
+            dbg.current.forEach(function (p, i) { addDot(p, dbg.current, i); });
+            if (dbg.current.length > 1) {
+              var pts = dbg.current.map(function (p) { return p.x + ',' + p.y; }).join(' ');
+              var poly = document.createElementNS(svgNS, 'polyline');
+              poly.setAttribute('points', pts);
+              poly.setAttribute('fill', 'none');
+              poly.setAttribute('stroke', '#ff4d4d');
+              poly.setAttribute('stroke-width', '0.4');
+              dbgSvg.appendChild(poly);
+            }
+
+            dbg.borders.forEach(function (border) {
+              border.points.forEach(function (p, i) { addDot(p, border.points, i, 'is-finished'); });
+              var pts2 = border.points.map(function (p) { return p.x + ',' + p.y; }).join(' ');
+              var poly2 = document.createElementNS(svgNS, 'polygon');
+              poly2.setAttribute('points', pts2);
+              poly2.setAttribute('fill', 'rgba(255,77,77,0.12)');
+              poly2.setAttribute('stroke', 'rgba(255,77,77,0.6)');
+              poly2.setAttribute('stroke-width', '0.3');
+              dbgSvg.appendChild(poly2);
+            });
+          }
+
+          function updateList() {
+            var dbg = getDbg();
+            if (dbg.mode === 'pin') {
+              listEl.textContent = dbg.pins.map(function (p) {
+                return (p.name ? '/* ' + p.name + ' */\n' : '') +
+                  'x: ' + p.x.toFixed(1) + ', y: ' + p.y.toFixed(1) + ',';
+              }).join('\n') || '(핀이 없습니다)';
+            } else {
+              var lines = dbg.borders.map(function (b, i) {
+                return '/* ' + (b.name || ('국경선 ' + (i + 1))) + ' */\nborder: [' +
+                  b.points.map(function (p) { return '[' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ']'; }).join(',') +
+                  ']';
+              });
+              if (dbg.current.length) {
+                lines.push('/* 새로 그리는 중 (' + dbg.current.length + '점) */\n' +
+                  dbg.current.map(function (p) { return '[' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ']'; }).join(', '));
+              }
+              listEl.textContent = lines.join('\n\n') || '(국경선이 없습니다)';
+            }
+          }
+
+          function refresh() { redrawDots(); updateList(); }
+          refreshDebug = refresh;
+
+          viewport.addEventListener('click', function (e) {
+            if (dragMoved) return;
+            if (e.target.closest && e.target.closest('.nw-map-debug-dot')) return;
+            var dbg = getDbg();
+            var rect = stage.getBoundingClientRect();
+            var x = clampPct((e.clientX - rect.left) / rect.width * 100);
+            var y = clampPct((e.clientY - rect.top) / rect.height * 100);
+
+            if (dbg.mode === 'pin') {
+              dbg.pins.push({ x: x, y: y, name: '' });
+              dbg.selected = { list: dbg.pins, index: dbg.pins.length - 1 };
+              pushUndo({ type: 'pin-add', list: dbg.pins });
+            } else if (dbg.current.length === 0) {
+              var target = findInsertTarget(dbg, x, y);
+              if (target) {
+                var newPoint = { x: x, y: y };
+                target.border.points.splice(target.insertIndex, 0, newPoint);
+                dbg.selected = { list: target.border.points, index: target.insertIndex };
+                pushUndo({ type: 'point-insert', list: target.border.points, index: target.insertIndex });
+              } else {
+                dbg.current.push({ x: x, y: y });
+                dbg.selected = { list: dbg.current, index: dbg.current.length - 1 };
+                pushUndo({ type: 'current-add', list: dbg.current });
+              }
+            } else {
+              dbg.current.push({ x: x, y: y });
+              dbg.selected = { list: dbg.current, index: dbg.current.length - 1 };
+              pushUndo({ type: 'current-add', list: dbg.current });
+            }
+            refresh();
+          }, true);
+
+          document.addEventListener('keydown', function (e) {
+            if (e.target && /^(input|textarea)$/i.test(e.target.tagName)) return;
+            var dbg = getDbg();
+            if (!dbg.selected) return;
+            var p = dbg.selected.list[dbg.selected.index];
+            if (!p) { dbg.selected = null; return; }
+
+            var step = e.shiftKey ? 1 : 0.1;
+            if (e.key === 'ArrowLeft') { p.x = clampPct(p.x - step); e.preventDefault(); refresh(); }
+            else if (e.key === 'ArrowRight') { p.x = clampPct(p.x + step); e.preventDefault(); refresh(); }
+            else if (e.key === 'ArrowUp') { p.y = clampPct(p.y - step); e.preventDefault(); refresh(); }
+            else if (e.key === 'ArrowDown') { p.y = clampPct(p.y + step); e.preventDefault(); refresh(); }
+            else if (e.key === 'Delete' || e.key === 'Backspace') {
+              var idx = dbg.selected.list.indexOf(p);
+              if (idx > -1) dbg.selected.list.splice(idx, 1);
+              dbg.selected = null;
+              e.preventDefault();
+              refresh();
+            }
+          });
+
+          panel.querySelectorAll('.nw-map-debug-modes button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var dbg = getDbg();
+              dbg.mode = btn.dataset.mode;
+              dbg.selected = null;
+              panel.querySelectorAll('.nw-map-debug-modes button').forEach(function (b) {
+                b.classList.toggle('active', b === btn);
+              });
+              refresh();
+            });
+          });
+
+          panel.querySelector('[data-act="undo"]').addEventListener('click', function () {
+            var stack = getUndoStack();
+            var action = stack.pop();
+            if (!action) return;
+
+            if (action.type === 'point-insert') {
+              action.list.splice(action.index, 1);
+            } else {
+              action.list.pop();
+            }
+            getDbg().selected = null;
+            refresh();
+          });
+          panel.querySelector('[data-act="finish"]').addEventListener('click', function () {
+            var dbg = getDbg();
+            if (dbg.mode !== 'border' || dbg.current.length < 3) return;
+            dbg.borders.push({
+              name: '',
+              points: dbg.current.map(function (p) {
+                return { x: Number(p.x.toFixed(1)), y: Number(p.y.toFixed(1)) };
+              })
+            });
+            dbg.current = [];
+            dbg.selected = null;
+            pushUndo({ type: 'border-finish', list: dbg.borders });
+            refresh();
+          });
+          panel.querySelector('[data-act="clear"]').addEventListener('click', function () {
+            var dbg = getDbg();
+            dbg.pins = []; dbg.borders = []; dbg.current = []; dbg.selected = null;
+            refresh();
+          });
+          panel.querySelector('[data-act="copy"]').addEventListener('click', function () {
+            var text = listEl.textContent;
+            if (navigator.clipboard) navigator.clipboard.writeText(text);
+            var btn = panel.querySelector('[data-act="copy"]');
+            var old = btn.textContent;
+            btn.textContent = '복사됨!';
+            setTimeout(function () { btn.textContent = old; }, 1000);
+          });
+
+          refresh();
+        }
+      })();
+
+      /* ============================================================
+         로딩 화면: 페이지의 모든 리소스(이미지 등)가 준비되면 사라짐
+         ============================================================ */
+      window.addEventListener('load', function () {
+        var loader = document.getElementById('nw-loader');
+        if (!loader) return;
+        loader.classList.add('nw-loader-hidden');
+        setTimeout(function () { loader.remove(); }, 450); // CSS transition 시간과 맞춤
+      });
+
+      /* 단어사전 */
+      (function () {
+        'use strict';
+        var WORDS_JSON_URL = 'https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/words.json';
+
+        var NW_DICT_STYLE = {
+          portalName: '아룬드 연대기',
+          dictLabel: '단어사전',
+          searchPlaceholder: '단어 검색',
+          exampleLabel: '예문',
+          colors: {
+            primary: 'var(--nw-accent)',
+            headerBg: 'var(--nw-surface-2)',
+            headerText: 'var(--nw-text-strong)',
+            widgetBg: 'var(--nw-surface)',
+            searchBg: 'var(--nw-surface-2)',
+            border: 'var(--nw-border-strong)',
+            wordColor: 'var(--nw-text-strong)',
+            posBg: 'var(--nw-surface-2)',
+            defColor: 'var(--nw-text)'
+          }
+        };
+
+        var root = document.getElementById('nw-dict-root');
+        if (!root) return;
+
+        /* 색상/라벨은 JSON과 무관하게 항상 먼저 적용 */
+        var co = NW_DICT_STYLE.colors;
+        root.style.setProperty('--dw-primary', co.primary);
+        root.style.setProperty('--dw-header-bg', co.headerBg);
+        root.style.setProperty('--dw-header-text', co.headerText);
+        root.style.setProperty('--dw-bg', co.widgetBg);
+        root.style.setProperty('--dw-search-bg', co.searchBg);
+        root.style.setProperty('--dw-border', co.border);
+        root.style.setProperty('--dw-word-color', co.wordColor);
+        root.style.setProperty('--dw-pos-bg', co.posBg);
+        root.style.setProperty('--dw-def-color', co.defColor);
+
+        document.getElementById('nw-dict-portal-name').textContent = NW_DICT_STYLE.portalName;
+        document.getElementById('nw-dict-label').textContent = NW_DICT_STYLE.dictLabel;
+        document.getElementById('nw-dict-search-input').placeholder = NW_DICT_STYLE.searchPlaceholder;
+        document.getElementById('nw-dict-example-label').textContent = NW_DICT_STYLE.exampleLabel;
+
+        var wordList = [];
+
+        /* 단어 하나를 화면에 그려주는 함수 */
+        function renderEntry(entry) {
+          if (!entry) return;
+          document.getElementById('nw-dict-word').textContent = entry.word || '';
+          document.getElementById('nw-dict-pron').textContent = entry.pronunciation || '';
+          document.getElementById('nw-dict-pos-badge').textContent = entry.partOfSpeech || '';
+
+          var ul = document.getElementById('nw-dict-defs');
+          ul.innerHTML = '';
+          (entry.definitions || []).forEach(function (def, i) {
+            var li = document.createElement('li');
+            li.className = 'nw-dict-def-item';
+            var num = document.createElement('span');
+            num.className = 'nw-dict-def-num';
+            num.textContent = i + 1;
+            var txt = document.createElement('span');
+            txt.className = 'nw-dict-def-text';
+            txt.textContent = def;
+            li.appendChild(num);
+            li.appendChild(txt);
+            ul.appendChild(li);
+          });
+
+          var exWrap = document.getElementById('nw-dict-example-wrap');
+          if (entry.example) {
+            document.getElementById('nw-dict-example-text').textContent = entry.example;
+            exWrap.classList.remove('nw-dict-hidden');
+          } else {
+            exWrap.classList.add('nw-dict-hidden');
+          }
+
+          var imgWrap = document.getElementById('nw-dict-img-wrap');
+          if (entry.imageUrl) {
+            var img = document.getElementById('nw-dict-word-img');
+            img.src = entry.imageUrl;
+            img.alt = entry.word || '';
+            imgWrap.classList.remove('nw-dict-hidden');
+          } else {
+            imgWrap.classList.add('nw-dict-hidden');
+          }
+        }
+
+        /* JSON 로드 → 무작위 한 단어를 기본으로 표시 */
+        fetch(WORDS_JSON_URL)
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            wordList = Array.isArray(data) ? data : [];
+            if (wordList.length) {
+              renderEntry(wordList[Math.floor(Math.random() * wordList.length)]);
+            }
+          })
+          .catch(function () {
+            document.getElementById('nw-dict-word').textContent = '(단어를 불러오지 못했어요)';
+          });
+
+        /* 검색창: 이제 장식용이 아니라 실제로 wordList 안에서 찾아줌 */
+        var searchInput = document.getElementById('nw-dict-search-input');
+        searchInput.addEventListener('keydown', function (e) {
+          if (e.key !== 'Enter') return;
+          var q = searchInput.value.trim().toLowerCase();
+          if (!q) return;
+          var found = wordList.find(function (w) {
+            return (w.word || '').toLowerCase().indexOf(q) !== -1;
+          });
+          if (found) {
+            renderEntry(found);
+          } else {
+            document.getElementById('nw-dict-word').textContent = '검색 결과 없음';
+            document.getElementById('nw-dict-defs').innerHTML = '';
+            document.getElementById('nw-dict-example-wrap').classList.add('nw-dict-hidden');
+            document.getElementById('nw-dict-img-wrap').classList.add('nw-dict-hidden');
+          }
+        });
+
+        var body = document.getElementById('nw-dict-body');
+        var toggleBtn = document.getElementById('nw-dict-toggle-btn');
+        var isCollapsed = false;
+        toggleBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          isCollapsed = !isCollapsed;
+          body.classList.toggle('nw-dict-collapsed', isCollapsed);
+          toggleBtn.textContent = isCollapsed ? '+' : '−';
+        });
+      })();
+
+      /* 단어사전 여닫기 버튼 */
+      (function () {
+        var launcher = document.getElementById('nw-dict-launcher');
+        var dictRoot = document.getElementById('nw-dict-root');
+        if (!launcher || !dictRoot) return;
+
+        var KEY = 'nw-dict-visible';
+        var visible = false;
+        try { visible = localStorage.getItem(KEY) === '1'; } catch (e) { }
+
+        function setVisible(v) {
+          visible = v;
+          dictRoot.classList.toggle('nw-dict-open', v);
+          launcher.classList.toggle('active', v);
+          try { localStorage.setItem(KEY, v ? '1' : '0'); } catch (e) { }
+        }
+        setVisible(visible);
+
+        launcher.addEventListener('click', function () {
+          setVisible(!visible);
+        });
+      })();
+
+      /* 검색 기능 */
+      (function () {
+        var SCOPE_KEY = 'nw-search-scope';
+        var currentScope = localStorage.getItem(SCOPE_KEY) || 'all';
+
+        var scopeSelects = document.querySelectorAll('.nw-search-scope-select');
+
+        function setScope(scope) {
+          currentScope = scope;
+          scopeSelects.forEach(function (sel) { sel.value = scope; });
+          try { localStorage.setItem(SCOPE_KEY, scope); } catch (e) { }
+        }
+        setScope(currentScope);
+
+        scopeSelects.forEach(function (sel) {
+          sel.addEventListener('change', function () { setScope(sel.value); });
+        });
+
+        function bindSearchForm(formId) {
+          var form = document.getElementById(formId);
+          if (!form) return;
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var q = form.querySelector('input[name="q"]').value.trim();
+            if (!q) return;
+            window.location.href = '[##_blog_link_##]search/' + encodeURIComponent(q) + '?scope=' + currentScope;
+          });
+        }
+        bindSearchForm('nw-search-form');
+        bindSearchForm('nw-hero-search-form');
+
+        /* 검색 결과 페이지에서 scope=title이면, 제목에 검색어가 없는 결과를 걸러냄 */
+        var params = new URLSearchParams(location.search);
+        if (params.get('scope') !== 'title') return;
+
+        var match = location.pathname.match(/\/search\/([^/]+)/);
+        if (!match) return;
+        var keyword = decodeURIComponent(match[1]).toLowerCase();
+
+        var items = document.querySelectorAll('.nw-list-item');
+        if (!items.length) return;
+
+        var visibleCount = 0;
+        items.forEach(function (item) {
+          var titleEl = item.querySelector('.nw-list-title');
+          var titleText = titleEl ? titleEl.textContent.toLowerCase() : '';
+          var isMatch = titleText.indexOf(keyword) !== -1;
+          item.style.display = isMatch ? '' : 'none';
+          if (isMatch) visibleCount += 1;
+        });
+
+        if (visibleCount === 0) {
+          var listContainer = items[0].parentElement;
+          var emptyMsg = document.createElement('p');
+          emptyMsg.textContent = '제목에 "' + match[1] + '"이(가) 포함된 문서가 없습니다.';
+          emptyMsg.style.cssText = 'padding:24px 0;color:var(--nw-muted);text-align:center;';
+          listContainer.appendChild(emptyMsg);
+        }
+      })();
+
+      /* ============================================================
+         원형 타로 스프레드 (중심 1장 + 주변 14장)
+         ============================================================ */
+      (function () {
+        var spread = document.getElementById('nw-tarot-spread-1');
+        if (!spread) return;
+
+        var positions = {
+          0: { title: '등대 카드', text: '포괄적인 방향을 암시하는 중심 카드이다.' },
+          1: { title: '1. 음유시인 아룬드', text: '모든 일의 시작, 유년기의 중심, 잠재된 능력의 탐색, 은밀하게 드리워진 그림자, 벗어나고자 하나 벗어날 수 없는 과거, 과거에 의해 미래가 이미 결정되어짐을 의미한다.<br />별 카드가 이 자리에 놓이면 순전한 희망과 오랜 경험이 가져오는 확신과 안식을 의미하지만, 역방향으로 나타난 카드일 경우 자신이 다 알고 있다고 생각한 세계가 다른 방법으로 역습을 가해 올 위험도 품고 있는 연약한 낙관일 수도 있는 것이다.<br />인생의 시작은 희망적이고 밝은 방향으로 나아가고 있다고 할 수 있다. 신뢰와 친절한 의도가 항상 가슴속에 가득 차 있으며, 재능도 있고 장래성도 있어서 다가온 기회를 빨리 잡게 된다. 미래는 한없이 밝아 보이며 타인을 향한 호의는 대부분 받아들여진다. 노력 역시 보답을 받는다. 그러나 지나친 낙관으로 이끌어갈 우려가 있다.<br />치유의 별, 에를라니를 너무 일찍 만나는 것이 좋지 않다는 해석도 존재한다. 행운이란 일정량에 불과해서, 너무 미리 다 써 버리면 나중에 겪게 될 수많은 고통들을 치료할 약이 남지 않을 수도 있다고 보는 견해인 것이다.' },
+          2: { title: '2. 암흑 아룬드', text: '인생에 걸쳐 가장 커다란 시련이나 고비, 힘에 벅찬 고난, 은밀하게 닥치는 시험, 뒤에 시련으로 변할 드높은 상급을 받음, 작은 실수의 크나큰 대가, 피할 수 없는 억울한 불행, 고통을 견딘 자에게만 주어지는 예지 등을 의미한다.<br />탑 카드가 이 자리에 놓이면 버티기 힘든 절망과 고통의 미래라는 해석을 가진다. 암흑 아룬드는 인간의 감각으로는 받아들일 수 없는 억울한 불행을 뜻한다. 그러므로 누구에게든 나타나야 할 변화의 시점이 그에게는 솔직 담백한 혁신이 아니라 기분 나쁘게 뭉클거리는 암운의 덩어리로 덮쳐 오리라고 짐작할 수 있다.<br/>최악의 결합 가운데 하나인 암흑 아룬드와 탑 카드의 결합을 버텨내는 일은 보통의 인간으로서는 매우 어렵다. 사람은 스스로에게 커다란 변화가 오게 되면 보통 과거의 인생을 돌아보고 성찰하여 원인을 찾으려 하기 마련인데, 암흑 아룬드와 탑 카드의 결합이 가져오는 충격은 그럴 여지를 완전히 앗아가 버린다. 느껴지는 것은 오직 부당한 징벌에 대한 원념과 절망 뿐으로 이러한 상태에서 자신의 운명을 성찰하는 것은 성자라 해도 어렵다.<br/>이러한 운명이 약속된 자는 곧 닥칠 불합리한 악운을 어떻게든 견뎌내고 성장하여 늙고 난 후에야 어렴풋이 그 이유를 볼 수 있을 테고, 만일 견디지 못한다면 성찰할 기회조차 없이 광인, 또는 자포자기한 악인이 되어 버리고 말 것이다.' },
+          3: { title: '3. 아르나 아룬드', text: '맹목적인 애정, 그 결과가 어찌 되든 시작하고 보는 애정, 행복한 만큼의 대가, 오래도록 고통받을 사랑의 시작, 아름다움 뒤에 감춰진 악한 의도, 자신이  원하여 상처받음, 순수함 때문에 모든 것을 희생함, 생애를 가르는 기다림을 의미한다.<br />세계 카드가 이 자리에 놓이면 생애 전부로서의 사랑이라는 해석을 가진다. 맹목적인 애정을 뜻하는 아르나의 자리는 자신의 영역으로 모든 힘을 빨아들이는 망각이며 미망의 상자다. 그것은 눈을 멀게 하는 사랑이다. 사랑은 자신이 곧 세상이 되기를  원하며, 다른 것이 끼여드는 것을 원치 않는다. 그리고 세계 카드는 그에게 세상을 약속한다. 독재자인 사랑은 모든 것을 집어삼키는 대신, 모든 고통을 견뎌 낼 힘 또한 선사한다. 더구나 세계 카드의 긍정적인 힘인 지혜와 해방은 이 애정이 어두운 곳으로 향할 여지를 차단하고 카드의 주인공으로 하여금 오직 사랑을 지고의 자리로 높이는 일에  몸을 바치도록 만든다. 맹목적인 어린 아이였던 사랑은 드디어  소유욕의 차원에서 벗어나, 희생과  합일의 사랑으로 이행해가게 되는 것이다. 그것은 가히  이스나에의 고귀한 정신, 이스나에 드라니아라스였던  레오 로아킨과 처녀 아르나의 지고한 사랑에 비견할 연인을 빚어낼 것이다.<br />세계 카드의 또 다른 의미인 순환의 개념 역시 이 즈음에는 절대적 사랑과 혼연 일체가 되어, 사랑이 시작되는 시점에서 새로운 생애를 열어 준다는 의미를 갖기도 한다.' },
+          4: { title: '4. 타로핀 아룬드', text: '확고불변함, 잠재된 문제 혹은 능력, 두 가지 가운데 하나만 얻음, 대가를 치르고 사람을 얻음의 의미를 가진다. 죽음 카드가 이 자리에 놓이면 크나큰 신의의 죽음이라는 해석을 가진다. 그것으로 인해 고통스럽지만 유용한 깨달음을 얻게 되리라는 것을 보여주기도 한다. 타로핀과 같이 단단한 차폐막으로 모든 세상의 악으로부터 차단되어 있던 사람은 어느 날 그 벽 속에 이미 들어와 있던 혼돈과 맞닥뜨린다. 그리고 서로를 죽인다. 그는 상처를 입고 피를 흘리며 고통스러워 몸부림친다. 다시 태어나기 전에 반드시 들어가야하는 이 잠은 참으로 괴롭다. 혹, 버티지 못하고 잠 속에서 무의미한 죽음을 맞을 수도 있다. 그러나 그가 성취를 이루고자 한다면 깨어나야만 하며, 그 성취는 또한 너무도 당연하게, 새로 시작된 생애에서 해결해야 할 중대한 문제를 안고 있을 것이다.' },
+          5: { title: '5. 키티아 아룬드', text: '보지 못하던 보물의 존재를 감지함, 미래에 대한 예지를 갖게 됨, 무언가를 꾸준히갈구함, 자신이 가진 능력을 발휘할 곳을 찾아냄, 운명의 수레바퀴에 직접 뛰어듦, 자기 자신의 마음을 나침반 삼아 길을 떠남, 강력한 예지 등의 의미를 가진다. 힘 카드가 이 자리에 놓이면 미래가 크나큰 도전과 대항으로 이루어진다는 해석을 가진다. 또한 도전을 이겨내는 것은 스스로 믿고 있는 외부의 힘이 아닌, 깊은 내면을 들여다보고 깨닫는 것에서 비롯된다는 것과 미워하고 두려워하는 적은 살해될 수 있는 존재가 아닌 내면에 용해되어 존재할 수 있다는 것을 가리키기도 한다. 그리하면 내면 속 파괴자를 위한 빈 자리가 마련되어 있다는 것을 깨닫게 된다. 더불어 모든 사실에 대한 예지가 결과에 앞서 서서히 다가오며 외부 힘에 의존하여 어려움을 헤쳐나가려던 스스로의 삶을 돌아보고 진정한 힘이 무엇인지 되돌아볼 기회 또한 주어진다.' },
+          6: { title: '6. 인도자 아룬드', text: '외부의 영향, 오랫동안 찾던 물건이나 사람을 만남, 자신의 의지로 인도자를 따름, 누군가에게 의지하려는 마음이 자의식을 누름, 친구였던 자가 스승이었음을 깨달음, 가능성에 불과한 것을 곧 현실화될 것처럼 착각함, 최악의 위기에서 구원을 받음 등을 의미한다.<br />악마 카드가 이 자리에 놓이면 위부에서 유입되는 영향이 혼돈과 악의뿐이라는 해석을 가진다. 잘못된 인도자에 사로잡히면 결코 자신의 가치를 알아낼 수 없고, 무모한 자학에 자신을 내던지게 될 것이다. 노력해도 유혹이 비처럼 쏟아져 의지를 녹여버리고, 존재하지 않는 적을 증오하고 존재하지 않는 미래의 불운을 두려워하게 된다. 다만 인도자의 자리가 뜻하듯 외부에서 오는 악영향이기 때문에 악마를 잘 막기만 하면 내부는 순식간에 정화될 가능성을 가지고 있다.' },
+          7: { title: '7. 약초 아룬드', text: '관련 정보가 없습니다.' },
+          8: { title: '8. 파비안느 아룬드', text: '관련 정보가 없습니다.' },
+          9: { title: '9. 환영주 아룬드', text: '관련 정보가 없습니다.' },
+          10: { title: '10. 방랑자 아룬드', text: '관련 정보가 없습니다.' },
+          11: { title: '11. 점성술 아룬드', text: '관련 정보가 없습니다.' },
+          12: { title: '12. 문자 아룬드', text: '관련 정보가 없습니다.' },
+          13: { title: '13. 황금 아룬드', text: '관련 정보가 없습니다.' },
+          14: { title: '14. 노장로 아룬드', text: '관련 정보가 없습니다.' }
+        };
+
+        var cards = Array.prototype.slice.call(spread.querySelectorAll('.nw-tarot-card'));
+        var centerCard = spread.querySelector('.nw-tarot-center');
+        var descBox = document.getElementById('nw-tarot-desc-1');
+
+        function layout() {
+          var size = spread.clientWidth;
+          var radius = size * 0.4; // 원의 반지름 (컨테이너 크기에 비례, 반응형 대응)
+          var count = cards.length;
+
+          cards.forEach(function (card, i) {
+            var angle = (i / count) * 2 * Math.PI - Math.PI / 2; // 12시 방향부터 시계방향
+            var x = Math.cos(angle) * radius;
+            var y = Math.sin(angle) * radius;
+            card.style.transform = 'translate(-50%, -50%) translate(' + x + 'px, ' + y + 'px)';
+          });
+        }
+        layout();
+        window.addEventListener('resize', layout);
+
+        function selectCard(el, posKey) {
+          spread.querySelectorAll('.is-selected').forEach(function (c) { c.classList.remove('is-selected'); });
+          el.classList.add('is-selected');
+          var data = positions[posKey];
+          if (!data) return;
+          var cardName = el.dataset.card;
+          descBox.innerHTML =
+            '<p class="nw-tarot-desc-title">' + data.title + (cardName ? ' — ' + cardName : '') + '</p>' +
+            '<p class="nw-tarot-desc-text">' + data.text + '</p>';
+        }
+
+        cards.forEach(function (card) {
+          card.addEventListener('click', function () {
+            selectCard(card, card.dataset.pos);
+          });
+        });
+        if (centerCard) {
+          centerCard.addEventListener('click', function () {
+            selectCard(centerCard, centerCard.dataset.pos);
+          });
+        }
+      })();
+
+      /* 작가 QnA */
+      (function () {
+        var boxes = document.querySelectorAll('.nw-qna[data-set]');
+        if (!boxes.length) return;
+
+        var JSON_URL = 'https://raw.githubusercontent.com/sallygamer07/Arund-Wiki/main/QnA.json?v=' + Date.now();
+
+        fetch(JSON_URL)
+          .then(function (res) {
+            if (!res.ok) throw new Error('데이터를 불러오지 못했습니다');
+            return res.json();
+          })
+          .then(function (data) {
+            var sets = data.qna_sets || {};
+            boxes.forEach(function (box) {
+              renderQnaBox(box, sets);
+            });
+          })
+          .catch(function () {
+            boxes.forEach(function (box) {
+              var titleEl = box.querySelector('.nw-qna-title');
+              if (titleEl) titleEl.textContent = 'Q&A를 불러오지 못했습니다';
+            });
+          });
+
+        function renderQnaBox(box, sets) {
+          var setKey = box.dataset.set;
+          var titleEl = box.querySelector('.nw-qna-title');
+          var listEl = box.querySelector('.nw-qna-list');
+          var qna = sets[setKey];
+
+          if (!qna) {
+            titleEl.textContent = '"' + setKey + '" 편을 찾을 수 없습니다';
+            return;
+          }
+
+          titleEl.textContent = qna.title;
+          listEl.innerHTML = '';
+
+          qna.items.forEach(function (item, i) {
+            var block = document.createElement('div');
+            block.className = 'nw-qna-block';
+            block.innerHTML =
+              '<div class="nw-qna-q">' +
+              '<span class="nw-qna-badge">Q' + (i + 1) + '</span>' +
+              '<div class="nw-qna-bubble">' + item.q + '</div>' +
+              '</div>' +
+              '<div class="nw-qna-a">' +
+              '<span class="nw-qna-badge">A</span>' +
+              '<div class="nw-qna-bubble">' + item.a + '</div>' +
+              '</div>';
+            listEl.appendChild(block);
+          });
+        }
+      })();
+
+      function plainText(str) {
+        if (!str) return '';
+        var idx = str.indexOf('<');
+        return (idx === -1 ? str : str.substring(0, idx)).trim();
+      }
+
+      /* 캐릭터 인포 표 자동 생성 */
+      if (articleBody) Promise.resolve(window.nwCharacterPromise).then(function (chars) {
+        chars = chars || [];
+        var me = chars.find(function (c) { return c.href === location.pathname; });
+        if (!me) return;
+        /* if (articleBody.querySelector('.nw-charinfo')) return; */
+        var oldTable = articleBody.querySelector('.nw-charinfo');
+        if (oldTable) oldTable.remove();
+
+        var fields = [
+          { label: '나이', key: 'age' },
+          { label: '생일', key: 'birthday' },
+          { label: '종족', key: 'race' },
+          { label: '성별', key: 'gender' },
+          { label: '가족', key: 'family' }
+        ];
+        var rows = fields
+          .filter(function (f) { return me[f.key]; })
+          .map(function (f) { return '<tr><th>' + f.label + '</th><td>' + me[f.key] + '</td></tr>'; })
+          .join('');
+
+        var table = document.createElement('table');
+        table.className = 'nw-charinfo';
+        table.innerHTML =
+          '<tbody>' +
+          '<tr><th colspan="2">' + me.name + '</th></tr>' +
+          (me.thumb ? '<tr><td colspan="2"><img src="' + me.thumb + '" alt="' + plainText(me.name) + '"></td></tr>' : '') +
+          rows +
+          '</tbody>';
+        articleBody.insertBefore(table, articleBody.firstChild);
+      });
+
+      /* 캐릭터 카테고리 목록 갤러리형/목록형 */
+      (function () {
+        var GALLERY_CATEGORY_PATH = '/category/인물';
+        if (decodeURIComponent(location.pathname).indexOf(GALLERY_CATEGORY_PATH) !== 0) return;
+
+        var listItems = document.querySelectorAll('.nw-list-item');
+        if (!listItems.length) return;
+        var mainEl = document.querySelector('.nw-main');
+        if (!mainEl) return;
+
+        var VIEW_KEY = 'nw-gallery-view-mode';
+        var mode = 'gallery';
+        try { mode = localStorage.getItem(VIEW_KEY) || 'gallery'; } catch (e) { }
+
+        var panel = document.createElement('div');
+        panel.className = 'nw-gallery-filters';
+        panel.style.display = 'none';
+
+        var grid = document.createElement('div');
+        grid.className = 'nw-gallery-grid';
+
+        var toggle = document.createElement('div');
+        toggle.className = 'nw-view-toggle';
+        toggle.innerHTML =
+          '<button type="button" class="nw-view-toggle-btn" data-view="gallery">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+          '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>' +
+          '<rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>' +
+          '</svg> 갤러리형' +
+          '</button>' +
+          '<button type="button" class="nw-view-toggle-btn" data-view="list">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+          '<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>' +
+          '</svg> 목록형' +
+          '</button>';
+
+        listItems[0].parentNode.insertBefore(toggle, listItems[0]);
+        listItems[0].parentNode.insertBefore(panel, listItems[0]);
+        listItems[0].parentNode.insertBefore(grid, listItems[0]);
+        listItems.forEach(function (item) { item.style.display = 'none'; });
+
+        var paging = document.querySelector('.nw-paging');
+        var toggleBtns = toggle.querySelectorAll('.nw-view-toggle-btn');
+
+        function applyMode(m) {
+          mode = m;
+          try { localStorage.setItem(VIEW_KEY, m); } catch (e) { }
+          var isGallery = m === 'gallery';
+          grid.style.display = isGallery ? '' : 'none';
+          panel.style.display = panel.dataset.ready === '1' ? '' : 'none';
+          if (window.nwRenderGalleryFilter) {
+            window.nwRenderGalleryFilter();
+          } else {
+            listItems.forEach(function (item) { item.style.display = 'none'; });
+          }
+          if (paging) paging.style.display = (m === 'list') ? '' : 'none';
+          toggleBtns.forEach(function (btn) { btn.classList.toggle('active', btn.dataset.view === m); });
+        }
+        toggleBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () { applyMode(btn.dataset.view); });
+        });
+        applyMode(mode);
+
+        Promise.resolve(window.nwCharacterPromise).then(function (chars) {
+          chars = (chars || []).slice();
+          if (!chars.length) return;
+
+          var byPath = {};
+          chars.forEach(function (c) {
+            try {
+              var p = new URL(c.href, location.origin).pathname;
+              byPath[p] = c;
+            } catch (e) { }
+          });
+          function getListItemPath(item) {
+            var titleLink = item.querySelector('.nw-list-title');
+            if (!titleLink) return null;
+            try { return new URL(titleLink.getAttribute('href'), location.origin).pathname; }
+            catch (e) { return null; }
+          }
+
+          function injectListThumbnails() {
+            listItems.forEach(function (item) {
+              if (item.querySelector('.nw-list-thumb')) return;
+              var path = getListItemPath(item);
+              if (!path) return;
+              var c = byPath[path];
+              if (!c) return;
+
+              var thumbEl;
+              if (c.thumb) {
+                thumbEl = document.createElement('img');
+                thumbEl.className = 'nw-list-thumb';
+                thumbEl.src = c.thumb;
+                thumbEl.alt = plainText(c.name);
+              } else {
+                thumbEl = document.createElement('div');
+                thumbEl.className = 'nw-list-thumb';
+                thumbEl.innerHTML =
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+                  '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' +
+                  '</svg>';
+              }
+              item.insertBefore(thumbEl, item.firstChild);
+              item.classList.add('has-thumb');
+            });
+          }
+          injectListThumbnails();
+
+          var state = { work: 'all', sort: 'name-asc' };
+          var works = Array.from(new Set(chars.map(function (c) { return c.work; }).filter(Boolean)));
+
+          panel.innerHTML =
+            '<select class="nw-gallery-select" id="nwGalWork"><option value="all">작품 전체</option>' +
+            works.map(function (w) { return '<option value="' + w + '">' + w + '</option>'; }).join('') +
+            '</select>' +
+            '<div class="nw-gallery-sort-group">' +
+            '<button type="button" class="nw-gallery-sort-btn" id="nwGalSort" data-sort="name-asc">이름 ▲</button>' +
+            '</div>';
+          panel.dataset.ready = '1';
+          if (mode === 'gallery') panel.style.display = '';
+
+          function render() {
+            var filtered = chars.filter(function (c) {
+              return state.work === 'all' || c.work === state.work;
+            });
+            filtered.sort(function (a, b) {
+              var cmp = plainText(a.name).localeCompare(plainText(b.name), 'ko');
+              return state.sort === 'name-asc' ? cmp : -cmp;
+            });
+
+            grid.innerHTML = '';
+            if (!filtered.length) {
+              grid.innerHTML = '<p style="color:var(--nw-muted);grid-column:1/-1;text-align:center;padding:20px 0;">조건에 맞는 인물이 없습니다.</p>';
+            } else {
+              filtered.forEach(function (c) {
+                var card = document.createElement('a');
+                card.className = 'nw-gallery-card';
+                card.href = c.href;
+                var mediaHtml = c.thumb
+                  ? '<img src="' + c.thumb + '" alt="' + plainText(c.name) + '">'
+                  : '<div class="nw-gallery-card-noimg">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+                  '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' +
+                  '</svg><span>이미지 없음</span></div>';
+                card.innerHTML =
+                  mediaHtml +
+                  '<div class="nw-gallery-card-body">' +
+                  '<p class="nw-gallery-card-name">' + plainText(c.name) + '</p>' +
+                  '<p class="nw-gallery-card-blurb">' + [c.work].filter(Boolean).join(' · ') + '</p>' +
+                  '</div>';
+                grid.appendChild(card);
+              });
+            }
+
+            /* ── 목록형(list)에도 같은 필터/정렬 반영 ── */
+            var matched = [];
+            var unmatched = [];
+            listItems.forEach(function (item) {
+              var path = getListItemPath(item);
+              var c = path ? byPath[path] : null;
+              if (c) matched.push({ item: item, name: c.name, work: c.work });
+              else unmatched.push(item);
+            });
+
+            var visibleMatched = matched.filter(function (m) {
+              return state.work === 'all' || m.work === state.work;
+            });
+            visibleMatched.sort(function (a, b) {
+              var cmp = plainText(a.name).localeCompare(plainText(b.name), 'ko');
+              return state.sort === 'name-asc' ? cmp : -cmp;
+            });
+            var hiddenMatched = matched.filter(function (m) {
+              return !(state.work === 'all' || m.work === state.work);
+            });
+
+            var container = listItems[0].parentNode;
+            var insertAnchor = (paging && paging.parentNode === container) ? paging : null;
+            visibleMatched.forEach(function (m) { container.insertBefore(m.item, insertAnchor); });
+            unmatched.forEach(function (item) { container.insertBefore(item, insertAnchor); });
+            hiddenMatched.forEach(function (m) { container.insertBefore(m.item, insertAnchor); });
+
+            var showList = mode === 'list';
+            visibleMatched.forEach(function (m) { m.item.style.display = showList ? '' : 'none'; });
+            unmatched.forEach(function (item) { item.style.display = showList ? '' : 'none'; });
+            hiddenMatched.forEach(function (m) { m.item.style.display = 'none'; });
+          }
+
+          window.nwRenderGalleryFilter = render;
+
+          panel.querySelector('#nwGalWork').addEventListener('change', function (e) {
+            state.work = e.target.value;
+            render();
+          });
+          var sortBtn = panel.querySelector('#nwGalSort');
+          sortBtn.addEventListener('click', function () {
+            state.sort = (state.sort === 'name-asc') ? 'name-desc' : 'name-asc';
+            sortBtn.dataset.sort = state.sort;
+            sortBtn.textContent = (state.sort === 'name-asc') ? '이름 ▲' : '이름 ▼';
+            render();
+          });
+
+          render();
+        });
+      })();
+
+      /* 인물 관계도 */
+      (function () {
+        var REL_POST_ID = '764';
+        if (location.pathname !== '/' + REL_POST_ID) return;
+        var body = document.getElementById('article-body');
+        if (!body) return;
+
+        Promise.resolve(window.nwDataPromise).then(function (data) {
+          var rel = data.relations || { nodes: [], edges: [] };
+          if (!rel.nodes.length) { body.textContent = '등록된 관계도가 없습니다.'; return; }
+
+          var wrap = document.createElement('div');
+          wrap.className = 'nw-relmap-wrap';
+
+          var svgNS = 'http://www.w3.org/2000/svg';
+          var svg = document.createElementNS(svgNS, 'svg');
+          svg.setAttribute('class', 'nw-relmap-svg');
+          svg.setAttribute('viewBox', '0 0 100 100');
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          wrap.appendChild(svg);
+
+          var nodeById = {};
+          rel.nodes.forEach(function (n) { nodeById[n.id] = n; });
+
+          var edgeEls = [];
+          rel.edges.forEach(function (e) {
+            var a = nodeById[e.from], b = nodeById[e.to];
+            if (!a || !b) return;
+            var line = document.createElementNS(svgNS, 'line');
+            line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+            line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+            line.setAttribute('class', 'nw-relmap-edge');
+            svg.appendChild(line);
+
+            if (e.label) {
+              var text = document.createElementNS(svgNS, 'text');
+              text.setAttribute('x', (a.x + b.x) / 2);
+              text.setAttribute('y', (a.y + b.y) / 2);
+              text.setAttribute('class', 'nw-relmap-edge-label');
+              text.textContent = e.label;
+              svg.appendChild(text);
+            }
+            edgeEls.push({ el: line, from: e.from, to: e.to });
+          });
+
+          var nodeEls = {};
+          rel.nodes.forEach(function (n) {
+            var el = document.createElement('div');
+            el.className = 'nw-relmap-node';
+            el.style.left = n.x + '%';
+            el.style.top = n.y + '%';
+            el.innerHTML = '<div class="nw-relmap-node-dot"></div><div class="nw-relmap-node-label">' + n.name + '</div>';
+            el.addEventListener('mouseenter', function () { highlight(n.id); });
+            el.addEventListener('mouseleave', function () { highlight(null); });
+            el.addEventListener('click', function () { if (n.href) window.location.href = n.href; });
+            wrap.appendChild(el);
+            nodeEls[n.id] = el;
+          });
+
+          function highlight(id) {
+            Object.keys(nodeEls).forEach(function (k) { nodeEls[k].classList.toggle('is-active', k === id); });
+            edgeEls.forEach(function (e) {
+              e.el.classList.toggle('is-active', id !== null && (e.from === id || e.to === id));
+            });
+          }
+
+          body.innerHTML = '';
+          body.appendChild(wrap);
+        });
+      })();
+      
+      /* 인물 관계도 편집기 */
+      (function () {
+        var REL_EDITOR_POST_ID = '128';
+
+        if (location.pathname !== '/' + REL_EDITOR_POST_ID) return;
+
+        var body = document.getElementById('article-body');
+        if (!body) return;
+
+        var style = document.createElement('style');
+        style.textContent =
+          '.nw-rel-editor{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start;}' +
+          '@media(max-width:800px){.nw-rel-editor{grid-template-columns:1fr;}}' +
+          '.nw-rel-canvas{position:relative;width:100%;aspect-ratio:1/1;background:var(--nw-surface);' +
+          'border:1px solid var(--nw-border);border-radius:var(--nw-radius);overflow:hidden;}' +
+          '.nw-rel-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}' +
+          '.nw-rel-edge-line{stroke:var(--nw-border-strong);stroke-width:0.3;}' +
+          '.nw-rel-edge-line.is-pending{stroke:var(--nw-accent);stroke-dasharray:1.5;}' +
+          '.nw-rel-edge-text{font-size:2.4px;fill:var(--nw-muted);text-anchor:middle;}' +
+          '.nw-rel-node{position:absolute;transform:translate(-50%,-50%);width:70px;text-align:center;cursor:grab;user-select:none;}' +
+          '.nw-rel-node:active{cursor:grabbing;}' +
+          '.nw-rel-node-dot{width:16px;height:16px;border-radius:50%;background:var(--nw-surface-2);' +
+          'border:2px solid var(--nw-border-strong);margin:0 auto 4px;}' +
+          '.nw-rel-node.is-edge-source .nw-rel-node-dot{border-color:var(--nw-accent);background:var(--nw-accent);}' +
+          '.nw-rel-node-label{font-size:11px;color:var(--nw-text-strong);white-space:nowrap;}' +
+          '.nw-rel-panel{background:var(--nw-surface);border:1px solid var(--nw-border);border-radius:var(--nw-radius);padding:14px 16px;}' +
+          '.nw-rel-panel label{display:block;font-size:12px;color:var(--nw-muted);margin:10px 0 4px;}' +
+          '.nw-rel-panel label:first-child{margin-top:0;}' +
+          '.nw-rel-panel select,.nw-rel-panel input[type=text]{width:100%;background:var(--nw-surface-2);' +
+          'border:1px solid var(--nw-border-strong);border-radius:4px;padding:7px 9px;color:var(--nw-text);font-size:13px;}' +
+          '.nw-rel-panel button{background:var(--nw-surface-2);border:1px solid var(--nw-border-strong);border-radius:4px;' +
+          'padding:8px 12px;color:var(--nw-text);font-size:12.5px;cursor:pointer;font-family:inherit;}' +
+          '.nw-rel-panel button:hover{border-color:var(--nw-accent);color:var(--nw-accent);}' +
+          '.nw-rel-panel button.primary{background:var(--nw-accent);border-color:var(--nw-accent);color:#1a1b1d;font-weight:700;}' +
+          '.nw-rel-panel button.active{background:var(--nw-accent);border-color:var(--nw-accent);color:#1a1b1d;font-weight:700;}' +
+          '.nw-rel-edge-list{margin-top:8px;display:flex;flex-direction:column;gap:6px;max-height:160px;overflow:auto;}' +
+          '.nw-rel-edge-item{display:flex;justify-content:space-between;align-items:center;' +
+          'background:var(--nw-surface-2);border:1px solid var(--nw-border-strong);border-radius:4px;' +
+          'padding:6px 9px;font-size:12px;color:var(--nw-text);}' +
+          '.nw-rel-edge-item button{background:none;border:none;color:var(--nw-muted);font-size:14px;cursor:pointer;padding:0 4px;}' +
+          '.nw-rel-edge-item button:hover{color:#e24b4a;}' +
+          '#nwRelOutput{width:100%;height:180px;background:var(--nw-surface-2);border:1px solid var(--nw-border-strong);' +
+          'border-radius:4px;color:var(--nw-text);font-family:Consolas,monospace;font-size:11px;padding:10px;resize:vertical;}';
+        document.head.appendChild(style);
+
+        body.innerHTML =
+          '<div class="nw-rel-editor">' +
+          '<div class="nw-rel-canvas" id="nwRelCanvas"><svg class="nw-rel-svg" id="nwRelSvg" viewBox="0 0 100 100"></svg></div>' +
+          '<div class="nw-rel-panel">' +
+          '<label>인물 추가</label>' +
+          '<select id="nwRelCharSelect"></select>' +
+          '<button id="nwRelAddBtn" style="width:100%;margin-top:6px;">캔버스에 추가</button>' +
+
+          '<label style="margin-top:16px;">간선(관계) 모드</label>' +
+          '<button id="nwRelEdgeModeBtn" style="width:100%;">간선 모드 켜기</button>' +
+          '<p style="font-size:11px;color:var(--nw-muted);margin:6px 0 0;">켠 상태에서 노드 두 개를 순서대로 클릭하세요.</p>' +
+
+          '<label>관계 목록</label>' +
+          '<div class="nw-rel-edge-list" id="nwRelEdgeList"><p style="color:var(--nw-muted);font-size:11.5px;">아직 없음</p></div>' +
+
+          '<label>생성된 코드</label>' +
+          '<textarea id="nwRelOutput" readonly></textarea>' +
+          '<button class="primary" id="nwRelCopyBtn" style="width:100%;margin-top:6px;">복사</button>' +
+          '<button id="nwRelClearBtn" style="width:100%;margin-top:6px;">전체 초기화</button>' +
+          '</div>' +
+          '</div>';
+
+        var canvas = document.getElementById('nwRelCanvas');
+        var svg = document.getElementById('nwRelSvg');
+        var svgNS = 'http://www.w3.org/2000/svg';
+        var charSelect = document.getElementById('nwRelCharSelect');
+        var addBtn = document.getElementById('nwRelAddBtn');
+        var edgeModeBtn = document.getElementById('nwRelEdgeModeBtn');
+        var edgeListEl = document.getElementById('nwRelEdgeList');
+        var output = document.getElementById('nwRelOutput');
+        var copyBtn = document.getElementById('nwRelCopyBtn');
+        var clearBtn = document.getElementById('nwRelClearBtn');
+
+        var nodes = []; // {id, name, href, x, y}
+        var edges = []; // {from, to, label}
+        var edgeMode = false;
+        var pendingSource = null;
+        var charList = [];
+
+        function clampPct(v) { return Math.max(2, Math.min(98, v)); }
+
+        function nodeById(id) { return nodes.find(function (n) { return n.id === id; }); }
+
+        function renderCanvas() {
+          canvas.querySelectorAll('.nw-rel-node').forEach(function (el) { el.remove(); });
+          svg.innerHTML = '';
+
+          edges.forEach(function (e) {
+            var a = nodeById(e.from), b = nodeById(e.to);
+            if (!a || !b) return;
+            var line = document.createElementNS(svgNS, 'line');
+            line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+            line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+            line.setAttribute('class', 'nw-rel-edge-line');
+            svg.appendChild(line);
+            if (e.label) {
+              var text = document.createElementNS(svgNS, 'text');
+              text.setAttribute('x', (a.x + b.x) / 2);
+              text.setAttribute('y', (a.y + b.y) / 2);
+              text.setAttribute('class', 'nw-rel-edge-text');
+              text.textContent = e.label;
+              svg.appendChild(text);
+            }
+          });
+
+          nodes.forEach(function (n) {
+            var el = document.createElement('div');
+            el.className = 'nw-rel-node' + (pendingSource === n.id ? ' is-edge-source' : '');
+            el.style.left = n.x + '%';
+            el.style.top = n.y + '%';
+            el.innerHTML = '<div class="nw-rel-node-dot"></div><div class="nw-rel-node-label">' + n.name + '</div>';
+
+            el.addEventListener('mousedown', function (e) {
+              e.preventDefault();
+              if (edgeMode) {
+                if (!pendingSource) {
+                  pendingSource = n.id;
+                  renderCanvas();
+                } else if (pendingSource !== n.id) {
+                  var label = prompt('관계를 입력하세요 (예: 남매, 동료, 연인)') || '';
+                  edges.push({ from: pendingSource, to: n.id, label: label });
+                  pendingSource = null;
+                  renderAll();
+                } else {
+                  pendingSource = null;
+                  renderCanvas();
+                }
+                return;
+              }
+              var onMove = function (ev) {
+                var rect = canvas.getBoundingClientRect();
+                n.x = Number(clampPct((ev.clientX - rect.left) / rect.width * 100).toFixed(1));
+                n.y = Number(clampPct((ev.clientY - rect.top) / rect.height * 100).toFixed(1));
+                renderCanvas();
+              };
+              var onUp = function () {
+                window.removeEventListener('mousemove', onMove);
+                window.removeEventListener('mouseup', onUp);
+                updateOutput();
+              };
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onUp);
+            });
+
+            canvas.appendChild(el);
+          });
+        }
+
+        function renderEdgeList() {
+          edgeListEl.innerHTML = '';
+          if (!edges.length) {
+            edgeListEl.innerHTML = '<p style="color:var(--nw-muted);font-size:11.5px;">아직 없음</p>';
+            return;
+          }
+          edges.forEach(function (e, i) {
+            var a = nodeById(e.from), b = nodeById(e.to);
+            var item = document.createElement('div');
+            item.className = 'nw-rel-edge-item';
+            var nameA = a ? a.name : e.from, nameB = b ? b.name : e.to;
+            item.innerHTML =
+              '<span>' + nameA + ' — ' + (e.label || '') + ' — ' + nameB + '</span>' +
+              '<button data-i="' + i + '">×</button>';
+            item.querySelector('button').addEventListener('click', function () {
+              edges.splice(i, 1);
+              renderAll();
+            });
+            edgeListEl.appendChild(item);
+          });
+        }
+
+        function updateOutput() {
+          var json = {
+            nodes: nodes.map(function (n) { return { id: n.id, name: n.name, href: n.href, x: n.x, y: n.y }; }),
+            edges: edges.map(function (e) { return { from: e.from, to: e.to, label: e.label }; })
+          };
+          output.value = JSON.stringify(json, null, 2);
+        }
+
+        function renderAll() {
+          renderCanvas();
+          renderEdgeList();
+          updateOutput();
+        }
+
+        addBtn.addEventListener('click', function () {
+          var idx = charSelect.value;
+          if (idx === '') return;
+          var c = charList[idx];
+          if (!c) return;
+          if (nodes.some(function (n) { return n.id === c.id; })) { alert('이미 추가된 인물입니다.'); return; }
+          nodes.push({ id: c.id, name: c.name, href: c.href, x: 50, y: 50 });
+          renderAll();
+        });
+
+        edgeModeBtn.addEventListener('click', function () {
+          edgeMode = !edgeMode;
+          pendingSource = null;
+          edgeModeBtn.classList.toggle('active', edgeMode);
+          edgeModeBtn.textContent = edgeMode ? '간선 모드 끄기' : '간선 모드 켜기';
+          renderCanvas();
+        });
+
+        clearBtn.addEventListener('click', function () {
+          if (!confirm('전체 초기화하시겠습니까?')) return;
+          nodes = []; edges = []; pendingSource = null;
+          renderAll();
+        });
+
+        copyBtn.addEventListener('click', function () {
+          output.select();
+          try { document.execCommand('copy'); } catch (e) { }
+          copyBtn.textContent = '복사됨!';
+          setTimeout(function () { copyBtn.textContent = '복사'; }, 1200);
+        });
+
+        Promise.all([
+          Promise.resolve(window.nwCharacterPromise).catch(function () { return []; }),
+          Promise.resolve(window.nwDataPromise).catch(function () { return {}; })
+        ]).then(function (results) {
+          charList = results[0] || [];
+          charSelect.innerHTML = charList.map(function (c, i) {
+            return '<option value="' + i + '">' + c.name + '</option>';
+          }).join('');
+
+          /* 기존에 data.json에 저장된 relations가 있으면 불러와서 편집 시작점으로 사용 */
+          var existing = (results[1] && results[1].relations) || { nodes: [], edges: [] };
+          nodes = (existing.nodes || []).map(function (n) { return { id: n.id, name: n.name, href: n.href, x: n.x, y: n.y }; });
+          edges = (existing.edges || []).slice();
+
+          renderAll();
+        });
+      })();
+
+      /* 미완성 문서(스텁) 자동 안내문 삽입 */
+      if (articleBody) Promise.resolve(window.nwCharacterPromise).then(function () {
+        var STUB_THRESHOLD = 500; // 이 글자 수 미만이면 안내문 표시
+
+        var clone = articleBody.cloneNode(true);
+        clone.querySelectorAll('.nw-toc, .nw-spoiler, .nw-notice, .nw-charinfo').forEach(function (el) { el.remove(); });
+        var textLength = clone.textContent.replace(/\s+/g, '').length;
+
+        if (textLength < STUB_THRESHOLD) {
+          var notice = document.createElement('div');
+          notice.className = 'nw-notice';
+          var strong = document.createElement('strong');
+          strong.textContent = '문서 작업 중';
+          var p = document.createElement('p');
+          p.textContent = '이 문서는 아직 작업 중입니다. 관련 내용을 찾는 대로 업데이트하겠습니다.';
+          notice.appendChild(strong);
+          notice.appendChild(p);
+          articleBody.insertBefore(notice, articleBody.firstChild);
+        }
+      });
+    })();
+  </script>
+
+
+</body>
+
+</html>
